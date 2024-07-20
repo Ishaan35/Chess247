@@ -6,7 +6,7 @@ void doStuff(){
     GraphicsWindow win1(600, 600);
 
     // Assuming chesspiece.png is in the current directory
-    win1.renderPNG("chesspiece.png", 50, 50);
+    win1.renderPNG("assets/chesspiece.png", 50, 50);
 
     // Draw rectangles and text
     win1.drawRectangle(100, 100, 50, 50, 186, 104, 37);
