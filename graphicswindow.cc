@@ -1,6 +1,7 @@
 #include "graphicswindow.h"
 
-GraphicsWindow::GraphicsWindow(int w, int h) : width(w), height(h){
+GraphicsWindow::GraphicsWindow(int w, int h) : width(w), height(h)
+{
     display = XOpenDisplay(nullptr);
     if (!display)
     {
