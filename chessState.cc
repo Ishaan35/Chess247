@@ -8,6 +8,7 @@ ChessState::ChessState(const std::vector<std::shared_ptr<Player>> &players)
     }
 }
 
+
 ChessState::ChessState(const ChessState &other)
 {
     for (size_t i = 0; i < other.board.size(); i++)
