@@ -5,7 +5,7 @@
 class InputSource
 {
 public:
-    InputMove getInput();
+    InputMove getInput(); // not implemented. will receive undefined reference error on make
 };
 
 #endif
