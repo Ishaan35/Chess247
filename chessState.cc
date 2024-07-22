@@ -8,7 +8,6 @@ ChessState::ChessState(const std::vector<std::shared_ptr<Player>> &players)
     }
 }
 
-
 ChessState::ChessState(const ChessState &other)
 {
     for (size_t i = 0; i < other.board.size(); i++)
@@ -16,7 +15,6 @@ ChessState::ChessState(const ChessState &other)
         board.push_back(std::vector<std::unique_ptr<Piece>>{});
         for (const auto &piece : other.board[i])
         {
-            // Review with Awab:
             //  causes a compile error if we just try to do make_unique<Piece>(*piece)
             //  because Piece is an abstract class and we can't copy it. we need a clone method. It won't know which piece subclass constructor to call
             //  We can't give it an explicit dynamic type since this could be any type of piece.
@@ -24,4 +22,9 @@ ChessState::ChessState(const ChessState &other)
             board[i].push_back(piece ? piece->clone() : nullptr);
         }
     }
+}
+
+const std::vector<std::vector<std::unique_ptr<Piece>>> &ChessState::getBoard()
+{
+    return board;
 }
