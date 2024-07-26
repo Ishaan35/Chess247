@@ -1,6 +1,12 @@
 #include "chessState.h"
 #include "./pieces/pieceFactory.h"
 
+bool ChessState::isDraw(){};
+
+bool ChessState::isCheckmate(){};
+
+void playMove(InputMove &inputMove){};
+
 ChessState::ChessState(const std::vector<std::weak_ptr<Player>> &players, int rows, int columns) : players{players}, board(rows) // r x c grid all nullptr by default
 {
     for (int i = 0; i < rows; i++)

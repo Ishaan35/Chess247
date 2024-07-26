@@ -11,15 +11,18 @@ class ChessState;
 
 class ChessGame{
     weak_ptr<InputSource> input;
-    vector<Player*> players; // players must be a vector of weak pointers
+    vector<weak_ptr<Player>> players; // players must be a vector of weak pointers
     int numActive;
+    shared_ptr<ChessState> chessState;
     // shared pointer to chessState owned
 
 public:
     ChessGame(weak_ptr<InputSource> input);
 
-    void runGame(); // calls play move in loop, prompts each player for a move, and if there is no remaining pieces, then game is done. nested loop
+    void runGame(vector<weak_ptr<Player>> allPlayers); // calls play move in loop, prompts each player for a move, and if there is no remaining pieces, then game is done. nested loop
     // checks if move is resign, sets player pointer to null 
 
-    void setup();
+    weak_ptr<Player> getWinner(vector<weak_ptr<Player>> remainingPlayers); 
+
+    void setup(int numPlayers);
 };

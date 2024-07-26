@@ -20,6 +20,9 @@ public:
     const std::vector<std::vector<std::unique_ptr<Piece>>> &getBoard();
     void defaultSetup();
     bool placePieceAtPosition(PieceType t, char file, char rank, int playerId);
+    void playMove(InputMove &inputMove);
+    bool isDraw();
+    bool isCheckmate();
     ~ChessState();
 };
 
