@@ -2,7 +2,7 @@
 #define GRAPHICSOBSERVER_H
 #include "observer.h"
 #include <memory>
-#include <chessState.h>
+#include "../chessState.h"
 
 class TextDisplay : public Observer
 {
@@ -10,7 +10,7 @@ class TextDisplay : public Observer
 
 public:
     TextDisplay();
-    void renderToTerminal();
+    void renderToTerminal(std::vector<std::vector<std::unique_ptr<Piece>>> &board);
     void notify() override;
     ~TextDisplay();
 };
