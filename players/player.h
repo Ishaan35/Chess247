@@ -5,11 +5,12 @@
 #include <string>
 #include <memory>
 #include <utility>
+#include <stdexcept>
 
 class Player
 {
     std::string name;
-    std::shared_ptr<InputSource> inputSource;
+    std::weak_ptr<InputSource> inputSource;
 
 public:
     virtual InputMove getMove() = 0;

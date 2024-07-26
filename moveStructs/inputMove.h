@@ -1,6 +1,7 @@
 #ifndef INPUTMOVE_H
 #define INPUTMOVE_H
 using namespace std;
+#include <utility>
 
 struct InputMove
 {

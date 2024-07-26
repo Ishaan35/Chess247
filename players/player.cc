@@ -7,5 +7,12 @@ std::string Player::getName()
 
 InputMove Player::getMove()
 {
-    return std::move(inputSource->getInput());
+    if (auto lockedPtr = inputSource.lock())
+    {
+        return lockedPtr->getInput();
+    }
+    else
+    {
+        throw std::runtime_error("Input source is no longer available.");
+    }
 }
