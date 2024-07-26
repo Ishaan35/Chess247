@@ -4,8 +4,9 @@
 #include "./pieces/piece.h"
 #include <vector>
 #include <memory>
+#include "subject.h"
 
-class ChessState
+class ChessState : public Subject
 {
     const std::vector<std::weak_ptr<Player>> &players;
     std::vector<std::vector<std::unique_ptr<Piece>>> board; // convention: relative to white. So top left is a8 and bottom right is h1
@@ -19,6 +20,7 @@ public:
     const std::vector<std::vector<std::unique_ptr<Piece>>> &getBoard();
     void defaultSetup();
     bool placePieceAtPosition(PieceType t, char file, char rank, int playerId);
+    ~ChessState();
 };
 
 #endif

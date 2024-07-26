@@ -2,19 +2,19 @@
 #define SUBJECT_H
 #include <vector>
 #include <memory>
-#include "observer.h"
+#include "outputs/observer.h"
 
 class Observer;
 
 class Subject
 {
-    std::vector<std::weak_ptr<Observer>> observers;
+    std::vector<std::weak_ptr<Observer>> observers; // application will clean up the observers
 
 public:
     void attach(Observer *o);
     void detach(Observer *o);
     void notifyObservers();
-    virtual ~Subject() = default;
+    virtual ~Subject() = 0;
 };
 
 #endif

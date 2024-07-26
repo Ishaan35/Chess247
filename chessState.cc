@@ -43,6 +43,8 @@ ChessState::ChessState(const ChessState &other) : players{other.players}
     }
 }
 
+ChessState::~ChessState() {}
+
 const std::vector<std::vector<std::unique_ptr<Piece>>> &ChessState::getBoard()
 {
     return board;
