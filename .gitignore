@@ -4,4 +4,4 @@
 # Dependency files
 *.d
 
-chess
+bin/

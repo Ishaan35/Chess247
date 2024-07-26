@@ -7,8 +7,11 @@ CXXFLAGS = -std=c++14 -Wall -g -MMD
 # Name of the executable
 EXEC = chess
 
+# directory for the bin
+BINDIR = ./bin
+
 # Find all cc files in the directory
-CCFILES = $(shell find . -name '*.cc')
+CCFILES = $(shell find . -name "*.cc")
 
 # Convert all cc files into .o object files
 OBJECTS = ${CCFILES:.cc=.o}
@@ -17,8 +20,9 @@ OBJECTS = ${CCFILES:.cc=.o}
 DEPENDS = ${OBJECTS:.o=.d}
 
 # Linking rule to create the executable
-${EXEC}: ${OBJECTS}
-	${CXX} ${OBJECTS} -o ${EXEC} -lcairo -lX11 
+${BINDIR}/${EXEC}: ${OBJECTS}
+	mkdir -p ${BINDIR}
+	${CXX} ${OBJECTS} -o ${BINDIR}/${EXEC} -lcairo -lX11 
 
 # Compile .cc files to .o files
 %.o: %.cc
@@ -32,4 +36,4 @@ ${EXEC}: ${OBJECTS}
 
 # Clean rule removes executable, object files, and dependency files
 clean:
-	rm -f ${EXEC} ${OBJECTS} ${DEPENDS}
+	rm -f ${BINDIR}/${EXEC} ${OBJECTS} ${DEPENDS}
