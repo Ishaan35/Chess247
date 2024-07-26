@@ -5,10 +5,10 @@
 #include <memory>
 #include "pieceType.h"
 
-//so the d
+// so the d
 class Piece
 {
-    
+
     PieceType type;
     int playerId;
 
@@ -19,7 +19,7 @@ public:
     Piece(PieceType t, int pId) : type{t}, playerId{pId} {}
     virtual std::unique_ptr<Piece> clone() = 0;
     virtual ~Piece() = default;
-
-
+    PieceType getType();
+    int getPlayerId();
 };
 #endif
