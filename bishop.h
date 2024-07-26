@@ -4,6 +4,9 @@
 
 class Bishop : public Piece
 {
+public:
+    Bishop(PieceType t, int pId);
+    std::unique_ptr<Piece> clone() override;
 };
 
 #endif

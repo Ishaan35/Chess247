@@ -1,4 +1,5 @@
 #include "chessState.h"
+#include "pieceFactory.h"
 
 ChessState::ChessState(const std::vector<std::shared_ptr<Player>> &players, int rows, int columns) : board(rows) //r x c grid all nullptr by default
 {
@@ -26,6 +27,7 @@ bool ChessState::placePieceAtPosition(PieceType t, char file, char rank, int pla
     }
 
     //add piece to state here
+    board[coords.first][coords.second] = createPiece(t, playerId);
     
 
     return true;

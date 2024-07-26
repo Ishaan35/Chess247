@@ -4,6 +4,9 @@
 
 class Queen : public Piece
 {
+public:
+    Queen(PieceType t, int pId);
+    std::unique_ptr<Piece> clone() override;
 };
 
 #endif

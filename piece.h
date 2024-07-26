@@ -8,16 +8,18 @@
 //so the d
 class Piece
 {
-    Movement m;
+    
     PieceType type;
     int playerId;
 
+protected:
+    Movement m;
+
 public:
     Piece(PieceType t, int pId) : type{t}, playerId{pId} {}
-    virtual std::unique_ptr<Piece> clone() const = 0;
+    virtual std::unique_ptr<Piece> clone() = 0;
     virtual ~Piece() = default;
 
-protected:
-    void setMovement();
+
 };
 #endif

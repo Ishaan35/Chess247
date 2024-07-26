@@ -1,4 +1,5 @@
-
+#ifndef PIECETYPE_H
+#define PIECETYPE_H
 enum class PieceType
 {
     Pawn,
@@ -8,3 +9,4 @@ enum class PieceType
     King,
     Queen
 };
+#endif
