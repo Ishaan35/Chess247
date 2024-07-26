@@ -7,6 +7,7 @@ struct InputMove
 {
     pair<int, int> from;
     pair<int, int> to;
+    bool isResign;
 };
 
 #endif
