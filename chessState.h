@@ -1,7 +1,7 @@
 #ifndef CHESSSTATE_H
 #define CHESSSTATE_H
-#include "player.h"
-#include "piece.h"
+#include "./players/player.h"
+#include "./pieces/piece.h"
 #include <vector>
 #include <memory>
 

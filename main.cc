@@ -1,6 +1,6 @@
 #include <iostream>
 #include <stdexcept>
-#include "graphicswindow.h"
+#include "./outputs/graphicswindow.h"
 
 void doStuff(){
     GraphicsWindow win1(600, 600);

@@ -1,6 +1,6 @@
 #ifndef INPUTSOURCE_H
 #define INPUTSOURCE_H
-#include "InputMove.h"
+#include "../moveStructs/inputMove.h"
 
 class InputSource
 {

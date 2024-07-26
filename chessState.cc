@@ -1,5 +1,5 @@
 #include "chessState.h"
-#include "pieceFactory.h"
+#include "./pieces/pieceFactory.h"
 
 ChessState::ChessState(const std::vector<std::shared_ptr<Player>> &players, int rows, int columns) : board(rows) //r x c grid all nullptr by default
 {

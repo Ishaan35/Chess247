@@ -2,7 +2,7 @@
 #define ENGINE_H
 #include <memory>
 #include "chessState.h"
-#include "InputMove.h"
+#include "./moveStructs/inputMove.h"
 
 class Engine
 {

@@ -1,7 +1,7 @@
 #ifndef PLAYER_H
 #define PLAYER_H
-#include "InputMove.h"
-#include "inputSource.h"
+#include "../moveStructs/inputMove.h"
+#include "../inputs/inputSource.h"
 #include <string>
 #include <memory>
 #include <utility>
