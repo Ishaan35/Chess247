@@ -11,8 +11,8 @@ using namespace std;
 
 class Player
 {
-    std::string name;
     std::weak_ptr<InputSource> inputSource;
+    std::string name;
     int gamesWon;
     int rating;
 
