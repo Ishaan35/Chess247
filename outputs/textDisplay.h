@@ -1,5 +1,5 @@
-#ifndef GRAPHICSOBSERVER_H
-#define GRAPHICSOBSERVER_H
+#ifndef TEXTDISPLAY_H
+#define TEXTDISPLAY_H
 #include "observer.h"
 #include <memory>
 #include "../chessState.h"
