@@ -8,7 +8,7 @@ CXXFLAGS = -std=c++14 -Wall -g -MMD
 EXEC = chess
 
 # Find all cc files in the directory
-CCFILES = $(wildcard *.cc)
+CCFILES = $(shell find . -name '*.cc')
 
 # Convert all cc files into .o object files
 OBJECTS = ${CCFILES:.cc=.o}
