@@ -1,6 +1,7 @@
 #include <iostream>
 #include <stdexcept>
 #include "./outputs/graphicswindow.h"
+#include "application.h"
 
 void doStuff(){
     GraphicsWindow win1(600, 600);
@@ -27,8 +28,6 @@ void doStuff(){
 
 int main()
 {
-
-    doStuff();
-
-    return 0;
+    Application mainApp;
+    mainApp.run();
 }
