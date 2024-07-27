@@ -11,13 +11,12 @@ using namespace std;
 
 class Player
 {
-    std::weak_ptr<InputSource> inputSource;
     std::string name;
     int gamesWon;
     int rating;
 
 public:
-    Player(weak_ptr<InputSource> inputSource, std::string name);
+    Player(std::string name);
     virtual InputMove getMove() = 0;
     std::string getName();
     void incrementWon();

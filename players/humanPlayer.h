@@ -4,6 +4,8 @@
 #include "player.h"
 class HumanPlayer : public Player
 {
+	std::weak_ptr<InputSource> inputSource;
+
 public:
 	InputMove getMove() override;
 

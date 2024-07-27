@@ -44,7 +44,7 @@ void Application::run() {
 			else {
 				int level;
 				cin >> level;
-				players[name] = make_shared<ComputerPlayer>(in, name, level);
+				players[name] = make_shared<ComputerPlayer>(level, name);
 			}
 		}
 		else if(command == "removep") {
