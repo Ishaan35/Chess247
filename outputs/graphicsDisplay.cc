@@ -22,6 +22,25 @@ GraphicsDisplay::GraphicsDisplay(int n, int w, int h, int squarew) : numPlayers{
 
     // // Control reaches here after handling events
     // std::cout << "Exiting..." << std::endl;
+
+    std::unordered_map<PieceType, std::string> p0FileMapping{
+        {PieceType::King, "WhiteKing.png"},
+        {PieceType::Queen, "WhiteQueen.png"},
+        {PieceType::Bishop, "WhiteBishop.png"},
+        {PieceType::Knight, "WhiteKnight.png"},
+        {PieceType::Pawn, "WhitePawn.png"},
+        {PieceType::Rook, "WhiteRook.png"},
+    };
+    std::unordered_map<PieceType, std::string> p1FileMapping{
+        {PieceType::King, "BlackKing.png"},
+        {PieceType::Queen, "BlackQueen.png"},
+        {PieceType::Bishop, "BlackBishop.png"},
+        {PieceType::Knight, "BlackKnight.png"},
+        {PieceType::Pawn, "BlackPawn.png"},
+        {PieceType::Rook, "BlackRook.png"},
+    };
+    pieceFileMappings.push_back(std::move(p0FileMapping));
+    pieceFileMappings.push_back(std::move(p1FileMapping));
 }
 
 void GraphicsDisplay::renderToScreen(const std::vector<std::vector<std::unique_ptr<Piece>>> &board)
@@ -49,6 +68,8 @@ void GraphicsDisplay::renderToScreen(const std::vector<std::vector<std::unique_p
             }
             if (board[i][j])
             {
+
+                window->renderPNG(pieceFileMappings[board[i][j]->getPlayerId()][board[i][j]->getType()], squareWidth, squareWidth);
             }
         }
         std::cout << std::endl;
@@ -57,6 +78,11 @@ void GraphicsDisplay::renderToScreen(const std::vector<std::vector<std::unique_p
 
 void GraphicsDisplay::notify()
 {
+    if (auto chessState = subject.lock())
+    {
+        const std::vector<std::vector<std::unique_ptr<Piece>>> &board = chessState->getBoard();
+        renderToScreen(board);
+    }
 }
 
 GraphicsDisplay::~GraphicsDisplay() {}
