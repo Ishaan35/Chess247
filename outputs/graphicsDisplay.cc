@@ -1,4 +1,5 @@
 #include "graphicsDisplay.h"
+#include "../pieces/pieceType.h"
 
 GraphicsDisplay::GraphicsDisplay(int n, int w, int h, int squarew) : numPlayers{n}, width{w}, height{h}, squareWidth{squarew}, darkSquareColor{Color{184, 134, 97}}, lightSquareColor{
                                                                                                                                                                          Color{238, 215, 174}},
@@ -22,25 +23,6 @@ GraphicsDisplay::GraphicsDisplay(int n, int w, int h, int squarew) : numPlayers{
 
     // // Control reaches here after handling events
     // std::cout << "Exiting..." << std::endl;
-
-    std::unordered_map<PieceType, std::string> p0FileMapping{
-        {PieceType::King, "WhiteKing.png"},
-        {PieceType::Queen, "WhiteQueen.png"},
-        {PieceType::Bishop, "WhiteBishop.png"},
-        {PieceType::Knight, "WhiteKnight.png"},
-        {PieceType::Pawn, "WhitePawn.png"},
-        {PieceType::Rook, "WhiteRook.png"},
-    };
-    std::unordered_map<PieceType, std::string> p1FileMapping{
-        {PieceType::King, "BlackKing.png"},
-        {PieceType::Queen, "BlackQueen.png"},
-        {PieceType::Bishop, "BlackBishop.png"},
-        {PieceType::Knight, "BlackKnight.png"},
-        {PieceType::Pawn, "BlackPawn.png"},
-        {PieceType::Rook, "BlackRook.png"},
-    };
-    pieceFileMappings.push_back(std::move(p0FileMapping));
-    pieceFileMappings.push_back(std::move(p1FileMapping));
 }
 
 void GraphicsDisplay::renderToScreen(const std::vector<std::vector<std::unique_ptr<Piece>>> &board)
@@ -68,8 +50,7 @@ void GraphicsDisplay::renderToScreen(const std::vector<std::vector<std::unique_p
             }
             if (board[i][j])
             {
-
-                window->renderPNG(pieceFileMappings[board[i][j]->getPlayerId()][board[i][j]->getType()], squareWidth, squareWidth);
+                window->renderPNG(PieceTypeConverter::getPieceAttributes(board[i][j]->getPlayerId(), board[i][j]->getType()).filename, squareWidth, squareWidth);
             }
         }
         std::cout << std::endl;

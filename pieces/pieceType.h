@@ -1,12 +1,35 @@
-#ifndef PIECETYPE_H
-#define PIECETYPE_H
+#ifndef PIECE_TYPE_H
+#define PIECE_TYPE_H
+
+#include <unordered_map>
+#include <string>
+
+// Define the enum for chess pieces
 enum class PieceType
 {
-    Pawn,
-    Rook,
-    Knight,
-    Bishop,
     King,
-    Queen
+    Queen,
+    Bishop,
+    Knight,
+    Pawn,
+    Rook
 };
-#endif
+
+struct PieceEnumAttributes
+{
+    char character;
+    std::string filename;
+};
+
+class PieceTypeConverter
+{
+public:
+    static const PieceEnumAttributes &getPieceAttributes(int playerId, PieceType pieceType);
+    static const PieceType charToPieceType(char piece);
+
+private:
+    static const std::unordered_map<PieceType, PieceEnumAttributes> playerPieceMappings[2];
+    static const std::unordered_map<char, PieceType> characterPieceMappings;
+};
+
+#endif 

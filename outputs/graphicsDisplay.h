@@ -28,7 +28,6 @@ class GraphicsDisplay : public Observer
     Color darkSquareColor;
     Color lightSquareColor;
     std::unique_ptr<GraphicsWindow> window;
-    std::vector<std::unordered_map<PieceType, std::string>> pieceFileMappings;
 
 public:
     GraphicsDisplay(int numPlayers, int w, int h, int squarew);
