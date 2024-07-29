@@ -1,5 +1,6 @@
 #include "chessState.h"
 #include "moveStructs/inputMove.h"
+#include "moveStructs/setupMove.h"
 #include "players/player.h"
 #include "inputs/inputSource.h"
 #include "chessState.h"

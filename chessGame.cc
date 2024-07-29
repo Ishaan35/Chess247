@@ -1,5 +1,6 @@
 #include "chessGame.h"
 #include <vector>
+using namespace std;
 
 ChessGame::ChessGame(weak_ptr<InputSource> input) : input{input}, players{}, numActive{0} {};
 // set isGameRunning to true in chess state
@@ -27,7 +28,7 @@ void ChessGame::runGame(vector<weak_ptr<Player>> allPlayers){
                     numActive--;
                 }
                 else{
-                    // chessState->playMove(currentMove);
+                    chessState->playMove(currentMove);
                     if(chessState->isDraw()); // figure out how to output
                     if(chessState->isCheckmate()); // figure out how to output
                 }
@@ -39,12 +40,31 @@ void ChessGame::runGame(vector<weak_ptr<Player>> allPlayers){
                     return;
                 }
             }
+            else{
+                throw std::runtime_error("input source no longer exists"); 
+            }
         }
     }   
 }
 // setup get the dimensions
 void ChessGame::setup(int numPlayers){
-    int rows, columns;
-    // input << rows << columns;
-    // ChessState chessState = ChessState{players, rows, columns};
+    int rows = 0;
+    int cols = 0;
+    if (auto inputLocked = input.lock()) {
+        pair<int, int> dimensions = inputLocked->getDimensions();
+        rows = dimensions.first;
+        cols = dimensions.second;
+    }
+    ChessState chessState = ChessState{players, rows, cols};
+
+    while(true){
+        if (auto inputLocked = input.lock()){
+            SetupMove setupMove = inputLocked->getSetup();
+            if (setupMove.isDone) break;
+            
+        }
+        else{
+            throw std::runtime_error("input source no longer exists"); 
+        }
+    }
 }
