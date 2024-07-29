@@ -1,5 +1,5 @@
 #include "emptyMovement.h"
 
-vector<PossibleMove>& EmptyMovement::getPossibleMoves(vector<PossibleMove>& allMoves, pair<int,int> position, int rows, int cols) {
+vector<PossibleMove>& EmptyMovement::getPossibleMoves(const vector<vector<unique_ptr<Piece>>>& board, vector<PossibleMove>& allMoves, pair<int,int> position) {
 	return allMoves;
 };
