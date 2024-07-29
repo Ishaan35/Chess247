@@ -13,7 +13,7 @@ class Piece
     int playerId;
 
 protected:
-    Movement m;
+    Movement *m;
 
 public:
     Piece(PieceType t, int pId) : type{t}, playerId{pId} {}
