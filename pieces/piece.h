@@ -11,7 +11,7 @@ class Piece
 {
     PieceType type;
     Color color;
-    bool hasMoved;
+    bool has_moved;
 
 protected:
     shared_ptr<Movement> m;

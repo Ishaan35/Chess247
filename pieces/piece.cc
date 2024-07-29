@@ -22,5 +22,5 @@ vector<PossibleMove> Piece::getPossibleMoves(pair<int, int> position, int rows, 
 
 bool Piece::hasMoved() const
 {
-    return hasMoved;
+    return has_moved;
 }
