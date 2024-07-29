@@ -1,11 +1,11 @@
 #ifndef PIECE_H
 #define PIECE_H
 
-#include "../movement/movement.h"
 #include <memory>
 #include "pieceType.h"
 #include "../colorEnum.h"
-
+#include <vector>
+#include "../movement/movement.h"
 // so the d
 class Piece
 {

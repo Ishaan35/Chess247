@@ -30,29 +30,49 @@ vector<PossibleMove> &SingleSquareMovement::getPossibleMoves(const vector<vector
 		}
 	}
 
+	////checking if we are getting position for king, and it has not moved (castling)
 	if (board[position.first][position.second]->getType() == PieceType::King && !board[position.first][position.second]->hasMoved())
 	{
 		// kingside castle check
 		if (0 <= position.second - 2)
 		{
-			// check if rook is present on the same rank, on the left corner of the board, and and has not moved, and king also has not moved
-			if (board[position.first][position.second]->getType() == PieceType::King && !board[position.first][position.second]->hasMoved())
+
+			// checking if the rook on the edge of the board has not moved
+			if (board[position.first][0] && board[position.first][0]->getType() == PieceType::Rook && !board[position.first][0]->hasMoved())
 			{
-				if (board[position.first][0] && board[position.first][0]->getType() == PieceType::Rook && !board[position.first][0]->hasMoved())
+				bool isWayClear = true;
+				// checking that all squares IN BETWEEN (EXCLUSIVE) rook and king are empty
+				for (int j = position.second - 1; j > 0; j--)
 				{
-					res.push_back(PossibleMove{position, make_pair(position.first, position.second - 2)});
+					if (board[position.first][j])
+					{ // constant i coordinate (row)
+						isWayClear = false;
+						break;
+					}
 				}
+				if (isWayClear)
+					res.push_back(PossibleMove{position, make_pair(position.first, position.second - 2)});
 			}
 		}
 		if (position.second + 2 < cols)
 		{
 			// queenside castle check
-			//  check if rook is present on the same rank, on the right corner of the board, and and has not moved, and king also has not moved
+			//  check if rook is present on the same rank, on the right corner of the board, and and has not moved
+
+			if (board[position.first][cols - 1] && board[position.first][cols - 1]->getType() == PieceType::Rook && !board[position.first][cols - 1]->hasMoved())
 			{
-				if (board[position.first][cols - 1] && board[position.first][cols - 1]->getType() == PieceType::Rook && !board[position.first][cols - 1]->hasMoved())
+				// check if no squares are in between rook and king (exclusive)
+				bool isWayClear = true;
+				for (int j = position.second + 1; j < cols - 1; j++)
 				{
-					res.push_back(PossibleMove{position, make_pair(position.first, position.second - 2)});
+					if (board[position.first][j])
+					{ // constant i coordinate (row)
+						isWayClear = false;
+						break;
+					}
 				}
+				if (isWayClear)
+					res.push_back(PossibleMove{position, make_pair(position.first, position.second - 2)});
 			}
 		}
 	}
