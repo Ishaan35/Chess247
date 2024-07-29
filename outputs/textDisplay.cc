@@ -19,6 +19,10 @@ void TextDisplay::renderToTerminal(const std::vector<std::vector<std::unique_ptr
             {
                 std::cout << PieceTypeConverter::getPieceAttributes(board[i][j]->getPlayerId(), board[i][j]->getType()).character;
             }
+            else
+            {
+                std::cout << ' ' << std::endl;
+            }
         }
         std::cout << std::endl;
     }
