@@ -6,7 +6,7 @@
 class VerticalMovement: public MovementDecorator {
 public:
 	VerticalMovement(Movement* next, Color color);
-	vector<PossibleMove>& getPossibleMoves(pair<int,int> position, int rows, int cols) override;
+	vector<PossibleMove>& getPossibleMoves(vector<PossibleMove>& allMoves, pair<int,int> position, int rows, int cols) override;
 };
 
 #endif

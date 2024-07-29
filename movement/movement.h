@@ -6,7 +6,7 @@ using namespace std;
 
 class Movement {
 public:
-	virtual vector<PossibleMove>& getPossibleMoves(pair<int,int> position, int rows, int cols)=0;
+	virtual vector<PossibleMove>& getPossibleMoves(vector<PossibleMove>& allMoves, pair<int,int> position, int rows, int cols)=0;
 };
 
 #endif

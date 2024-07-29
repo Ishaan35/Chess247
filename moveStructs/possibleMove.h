@@ -10,8 +10,9 @@ struct PossibleMove
     bool isCapture;
 	bool isNormalMove;
     bool needFirstMove;
+    bool canJump;
 
-    PossibleMove(pair<int, int> from, pair<int, int> to, bool isCapture, bool isNormalMove, bool needFirstMove = false):
+    PossibleMove(pair<int, int> from, pair<int, int> to, bool isCapture, bool isNormalMove, bool needFirstMove = false, bool canJump = false):
         from{from}, to{to}, isCapture{isCapture}, isNormalMove{isNormalMove}, needFirstMove{needFirstMove} {}
 };
 

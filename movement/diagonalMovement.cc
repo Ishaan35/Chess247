@@ -2,7 +2,7 @@
 #include <algorithm>
 
 DiagonalMovement::DiagonalMovement(Movement* next, Color color): MovementDecorator{next, color} {}
-vector<PossibleMove>& DiagonalMovement::getPossibleMoves(pair<int,int> position, int rows, int cols) {
+vector<PossibleMove>& DiagonalMovement::getPossibleMoves(vector<PossibleMove>& allMoves, pair<int,int> position, int rows, int cols) {
 	
 	// should be able to move anywhere from here diagonally (same x and y offset)
 	vector<PossibleMove>& res = next->getPossibleMoves(position, rows, cols);

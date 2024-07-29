@@ -2,11 +2,11 @@
 #include <algorithm>
 
 PawnMovement::PawnMovement(Movement* next, Color color): MovementDecorator{next, color} {}
-vector<PossibleMove>& PawnMovement::getPossibleMoves(pair<int,int> position, int rows, int cols) {
+vector<PossibleMove>& PawnMovement::getPossibleMoves(vector<PossibleMove>& allMoves, pair<int,int> position, int rows, int cols) {
 	
 	// return 1 fwd, 2 fwd, and both diagonal capture moves
 
-	vector<PossibleMove>& res = next->getPossibleMoves(position, rows, cols);
+	vector<PossibleMove>& res = next->getPossibleMoves(allMoves, position, rows, cols);
 
 	int direction = color == WHITE ? 1 : -1;
 	int newX1 = position.first + direction;

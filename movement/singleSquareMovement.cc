@@ -2,11 +2,11 @@
 #include <algorithm>
 
 SingleSquareMovement::SingleSquareMovement(Movement* next, Color color): MovementDecorator{next, color} {}
-vector<PossibleMove>& SingleSquareMovement::getPossibleMoves(pair<int,int> position, int rows, int cols) {
+vector<PossibleMove>& SingleSquareMovement::getPossibleMoves(vector<PossibleMove>& allMoves, pair<int,int> position, int rows, int cols) {
 	
 	// return 1 fwd, 2 fwd, and both diagonal capture moves
 
-	vector<PossibleMove>& res = next->getPossibleMoves(position, rows, cols);
+	vector<PossibleMove>& res = next->getPossibleMoves(allMoves, position, rows, cols);
 
 	vector<int> deltas = {-1, 0, 1};
 
