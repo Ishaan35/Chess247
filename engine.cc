@@ -14,7 +14,7 @@ ChessState Engine::createChessStateCopy()
     }
 }
 
-InputMove Engine::getBestMove(int player, int depth)
+InputMove Engine::getBestMove(Color playerColor, int depth)
 {
     return InputMove{}; // Stub
 }
