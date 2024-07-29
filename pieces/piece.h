@@ -20,7 +20,7 @@ public:
     Piece(PieceType t, Color color, Movement *m) : type{t}, color{color}, m{m} {}
     virtual std::unique_ptr<Piece> clone() = 0;
     virtual ~Piece() = default;
-    vector<PossibleMove> getPossibleMoves(pair<int, int> position, int rows, int cols);
+    vector<PossibleMove> getPossibleMoves(pair<int, int> position, std::vector<std::vector<std::unique_ptr<Piece>>> &board);
     PieceType getType();
     Color getColor();
     bool hasMoved() const;

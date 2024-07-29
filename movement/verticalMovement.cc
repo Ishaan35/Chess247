@@ -1,14 +1,25 @@
 #include "verticalMovement.h"
 #include <algorithm>
 
-VerticalMovement::VerticalMovement(Movement* next, Color color): MovementDecorator{next, color} {}
-vector<PossibleMove>& VerticalMovement::getPossibleMoves(vector<PossibleMove>& allMoves, pair<int,int> position, int rows, int cols) {
-	
-	// inside same col
-	vector<PossibleMove>& res = next->getPossibleMoves(allMoves, position, rows, cols);
+VerticalMovement::VerticalMovement(Movement *next, Color color) : MovementDecorator{next, color} {}
+vector<PossibleMove> &VerticalMovement::getPossibleMoves(const vector<vector<unique_ptr<Piece>>> &board, vector<PossibleMove> &allMoves, pair<int, int> position)
+{
 
-	for(int i = 0;i < rows; i++) {
-		res.push_back(PossibleMove{position, make_pair(position.first, i), true, true});
+	// inside same col
+	// position.first is i, and position.second is j. (row/col)
+	vector<PossibleMove> &res = next->getPossibleMoves(board, allMoves, position);
+
+	for (size_t i = position.first + 1; i < board.size(); i++)
+	{
+		res.push_back(PossibleMove{position, make_pair(i, position.second)});
+		if (board[i][position.second])
+			break; // break since we cannpt move through this piece.
+	}
+	for (size_t i = position.first - 1; i >= 0; i--)
+	{
+		res.push_back(PossibleMove{position, make_pair(i, position.second)});
+		if (board[i][position.second])
+			break;
 	}
 	return res;
 };

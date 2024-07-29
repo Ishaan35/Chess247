@@ -28,12 +28,13 @@ public:
     bool isValidMove(pair<int, int> toCoords, pair<int, int> fromCoords);
     void playMove(InputMove &inputMove);
     bool isDraw();
+    bool isCheck();
     bool isCheckmate();
     void setGameRunning();
-    bool isCoordinateInBounds(std::pair<int, int>& coords);
+    bool isCoordinateInBounds(std::pair<int, int> &coords);
     void setResign(bool target);
     void setDraw(bool target);
-    void setCheckmate(bool target); 
+    void setCheckmate(bool target);
     void setWinner(Color color);
     bool getResign();
     bool getDraw();
