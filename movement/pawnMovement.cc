@@ -2,26 +2,31 @@
 #include <algorithm>
 
 PawnMovement::PawnMovement(Movement* next, Color color): MovementDecorator{next, color} {}
-vector<PossibleMove>& PawnMovement::getPossibleMoves(vector<PossibleMove>& allMoves, pair<int,int> position, int rows, int cols) {
+vector<PossibleMove>& PawnMovement::getPossibleMoves(const vector<vector<unique_ptr<Piece>>>& board, vector<PossibleMove>& allMoves, pair<int,int> position) {
 	
 	// return 1 fwd, 2 fwd, and both diagonal capture moves
 
-	vector<PossibleMove>& res = next->getPossibleMoves(allMoves, position, rows, cols);
+	vector<PossibleMove>& res = next->getPossibleMoves(board, allMoves, position);
 
 	int direction = color == WHITE ? 1 : -1;
-	int newX1 = position.first + direction;
-	int newX2 = position.first + 2 * direction;
+	int y = position.second;
+	int x = position.first;
+	int newX1 = x + direction;
+	int newX2 = x + 2 * direction;
 
-	if(0 <= newX1 && newX1 < rows) {
-		res.push_back(PossibleMove{position, make_pair(newX1, position.second), false, true});
-		if(0 <= position.second - 1) {
-			res.push_back(PossibleMove{position, make_pair(newX1, position.second-1), true, false});
+	// make sure pawn hasn't moved
+	if(0 <= newX1 && newX1 < board.size()) {
+		if(!board[newX1][y]) {
+			res.push_back(PossibleMove{position, make_pair(newX1, y)});
 		}
-		if(position.second + 1 < cols) {
-			res.push_back(PossibleMove{position, make_pair(newX1, position.second+1), true, false});
+		if(0 <= y - 1 && board[newX1][y - 1]) {
+			res.push_back(PossibleMove{position, make_pair(newX1, y-1)});
 		}
-		if(0 <= newX2 && newX2 < rows) {
-			res.push_back(PossibleMove{position, make_pair(newX2, position.second), false, true, true});
+		if(y + 1 < board[0].size() && board[newX1][y + 1]) {
+			res.push_back(PossibleMove{position, make_pair(newX1, y+1)});
+		}
+		if(0 <= newX2 && newX2 < board.size() && !board[x][y]->hasMoved()) {
+			res.push_back(PossibleMove{position, make_pair(newX2, y)});
 		}
 	}
 
