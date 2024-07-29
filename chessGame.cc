@@ -10,16 +10,6 @@ ChessGame::ChessGame(weak_ptr<InputSource> input) : input{input}, players{}, num
 
 // need to play move and place piece during setup right now
 
-weak_ptr<Player> ChessGame::getWinner(vector<weak_ptr<Player>> remainingPlayers){
-    for (size_t i=0; i < remainingPlayers.size(); i++){
-        if (!remainingPlayers[i].expired()){
-            return remainingPlayers[i];
-        }
-    }
-    weak_ptr<Player> nullPlayer;
-    return nullPlayer;
-}
-
 void ChessGame::runGame(weak_ptr<Player> whitePlayer, weak_ptr<Player> blackPlayer){
     chessState->setGameRunning();
 
@@ -30,22 +20,24 @@ void ChessGame::runGame(weak_ptr<Player> whitePlayer, weak_ptr<Player> blackPlay
             if(auto lockedPlayer = players[i].lock()){
                 InputMove currentMove = lockedPlayer->getMove();
                 if(currentMove.isResign){
-                    
-                    players[i].reset();
-                    numActive--;
+                    int winner = (i+1)%2;
+                    Color winnerColor = static_cast<Color>(winner);
+                    chessState->setResign(true);
+                    chessState->setWinner(winnerColor);
+                    return;
                 }
                 else{
                     chessState->playMove(currentMove);
-                    if(chessState->isDraw()); // figure out how to output
-                    if(chessState->isCheckmate()); // figure out how to output
-                }
-                if(numActive == 1){
-                    weak_ptr<Player> winner = getWinner(players);
-                    if (auto winnerLocked = winner.lock()){
-                        winnerLocked->incrementWon();
+                    if(chessState->isCheckmate()){
+                        Color winnerColor = static_cast<Color>(i);
+                        chessState->setCheckmate(true);
+                        chessState->setWinner(winnerColor);
+                        return;
                     }
-                    // figure out how to display winner/notify observers
-                    return;
+                    if(chessState->isDraw()){
+                        chessState->setDraw(true);
+                        return;
+                    }
                 }
             }
             else{
@@ -64,6 +56,7 @@ void ChessGame::setup(){
         cols = dimensions.second;
     }
     chessState = std::make_shared<ChessState>(players, rows, cols);
+    
     while(true){
         if (auto inputLocked = input.lock()){
             SetupMove setupMove = inputLocked->getSetup();

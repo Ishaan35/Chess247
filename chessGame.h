@@ -4,6 +4,8 @@
 #include "players/player.h"
 #include "inputs/inputSource.h"
 #include "chessState.h"
+#include "./colorEnum.h"
+
 using namespace std;
 
 class InputMove;

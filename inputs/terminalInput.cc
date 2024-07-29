@@ -112,8 +112,7 @@ InputMove TerminalInput::getInput()
     return move;
 }
 
-pair<int, int> TerminalInput::getDimensions()
-{
+pair<int, int> TerminalInput::getDimensions(){
     int rows, cols;
     pair<int, int> dims{};
     if (cin >> rows)

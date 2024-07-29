@@ -34,9 +34,11 @@ public:
     void setResign(bool target);
     void setDraw(bool target);
     void setCheckmate(bool target); 
+    void setWinner(Color color);
     bool getResign();
     bool getDraw();
     bool getCheckmate();
+    Color getWinner();
     ~ChessState();
 };
 
