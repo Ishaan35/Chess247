@@ -17,7 +17,7 @@ void TextDisplay::renderToTerminal(const std::vector<std::vector<std::unique_ptr
         {
             if (board[i][j])
             {
-                std::cout << PieceTypeConverter::getPieceAttributes(board[i][j]->getPlayerId(), board[i][j]->getType()).character;
+                std::cout << PieceTypeConverter::getPieceAttributes(board[i][j]->getColor(), board[i][j]->getType()).character;
             }
             else
             {

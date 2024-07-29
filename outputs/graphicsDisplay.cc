@@ -50,7 +50,7 @@ void GraphicsDisplay::renderToScreen(const std::vector<std::vector<std::unique_p
             }
             if (board[i][j])
             {
-                window->renderPNG(PieceTypeConverter::getPieceAttributes(board[i][j]->getPlayerId(), board[i][j]->getType()).filename, squareWidth, squareWidth);
+                window->renderPNG(PieceTypeConverter::getPieceAttributes(board[i][j]->getColor(), board[i][j]->getType()).filename, squareWidth, squareWidth);
             }
         }
         std::cout << std::endl;
