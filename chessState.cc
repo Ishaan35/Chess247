@@ -7,14 +7,17 @@ void ChessState::setGameRunning(){
 
 void ChessState::setResign(bool target){
     resign = target;
+    notifyObservers();
 }
 
 void ChessState::setDraw(bool target){
     draw = target;
+    notifyObservers();
 }
 
 void ChessState::setCheckmate(bool target){
     checkmate = target;
+    notifyObservers();
 }
 
 bool ChessState::getDraw(){
