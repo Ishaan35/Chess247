@@ -5,7 +5,7 @@
 class EmptyMovement : public Movement
 {
 public:
-	vector<PossibleMove>& getPossibleMoves(vector<PossibleMove>& allMoves, pair<int,int> position, int rows, int cols) override;
+	vector<PossibleMove>& getPossibleMoves(const vector<vector<unique_ptr<Piece>>>& board, vector<PossibleMove>& allMoves, pair<int,int> position) override;
 };
 
 #endif
