@@ -122,6 +122,13 @@ const std::vector<std::vector<std::unique_ptr<Piece>>> &ChessState::getBoard()
 
 void ChessState::defaultSetup()
 {
+    for (size_t i = 0; i < board.size(); i++)
+    {
+        for (size_t j = 0; j < board[0].size(); j++)
+        {
+            board[i][j] = std::unique_ptr<Piece>(nullptr);
+        }
+    }
     placePieceAtPosition(PieceType::Rook, 'a', '1', Color::WHITE);
     placePieceAtPosition(PieceType::Knight, 'b', '1', Color::WHITE);
     placePieceAtPosition(PieceType::Bishop, 'c', '1', Color::WHITE);

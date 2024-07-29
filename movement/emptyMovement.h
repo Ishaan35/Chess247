@@ -2,9 +2,10 @@
 #define EMPTY_MOVEMENT_H
 #include "movement.h"
 
-class EmptyMovement: public Movement {
+class EmptyMovement : public Movement
+{
 public:
-	vector<PossibleMove>& getPossibleMoves(pair<int,int> position, int rows, int cols) override;
+	vector<PossibleMove> &getPossibleMoves(pair<int, int> position, int rows, int cols) override;
 };
 
 #endif
