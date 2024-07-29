@@ -5,7 +5,7 @@
 
 class ComputerPlayer : public Player
 {
-	int playerIndex;
+	Color playerColor;
 	weak_ptr<Engine> engine;
 	int level;
 public: 
@@ -13,7 +13,7 @@ public:
 
 	ComputerPlayer(int level, string name);
 
-	void setEngine(weak_ptr<Engine> eng, int playerInd);
+	void setEngine(weak_ptr<Engine> eng, Color playerCol);
 
 };
 

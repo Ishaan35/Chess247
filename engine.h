@@ -3,6 +3,7 @@
 #include <memory>
 #include "chessState.h"
 #include "./moveStructs/inputMove.h"
+#include "colorEnum.h"
 
 class Engine
 {
@@ -10,7 +11,7 @@ class Engine
     ChessState createChessStateCopy();
 
 public:
-    InputMove getBestMove(int player, int depth);
+    InputMove getBestMove(Color playerColor, int depth);
 };
 
 #endif
