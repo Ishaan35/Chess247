@@ -1,7 +1,8 @@
 #include "chessState.h"
 #include "./pieces/pieceFactory.h"
 
-void ChessState::setWinner(Color winnerColor){
+void ChessState::setWinner(Color winnerColor)
+{
     winner = winnerColor;
 }
 
@@ -121,4 +122,29 @@ const std::vector<std::vector<std::unique_ptr<Piece>>> &ChessState::getBoard()
 
 void ChessState::defaultSetup()
 {
+    placePieceAtPosition(PieceType::Rook, 'a', '1', Color::WHITE);
+    placePieceAtPosition(PieceType::Knight, 'b', '1', Color::WHITE);
+    placePieceAtPosition(PieceType::Bishop, 'c', '1', Color::WHITE);
+    placePieceAtPosition(PieceType::Queen, 'd', '1', Color::WHITE);
+    placePieceAtPosition(PieceType::King, 'e', '1', Color::WHITE);
+    placePieceAtPosition(PieceType::Bishop, 'f', '1', Color::WHITE);
+    placePieceAtPosition(PieceType::Knight, 'g', '1', Color::WHITE);
+    placePieceAtPosition(PieceType::Rook, 'h', '1', Color::WHITE);
+    for (int i = 0; i < 8; i++)
+    {
+        placePieceAtPosition(PieceType::Pawn, (char)('a' + i), '2', Color::WHITE);
+    }
+
+    placePieceAtPosition(PieceType::Rook, 'a', '8', Color::BLACK);
+    placePieceAtPosition(PieceType::Knight, 'b', '8', Color::BLACK);
+    placePieceAtPosition(PieceType::Bishop, 'c', '8', Color::BLACK);
+    placePieceAtPosition(PieceType::Queen, 'd', '8', Color::BLACK);
+    placePieceAtPosition(PieceType::King, 'e', '8', Color::BLACK);
+    placePieceAtPosition(PieceType::Bishop, 'f', '8', Color::BLACK);
+    placePieceAtPosition(PieceType::Knight, 'g', '8', Color::BLACK);
+    placePieceAtPosition(PieceType::Rook, 'h', '8', Color::BLACK);
+    for (int i = 0; i < 8; i++)
+    {
+        placePieceAtPosition(PieceType::Pawn, (char)('a' + i), '7', Color::BLACK);
+    }
 }
