@@ -3,7 +3,8 @@
 #include "./outputs/graphicswindow.h"
 #include "application.h"
 
-void doStuff(){
+void doStuff()
+{
     GraphicsWindow win1(600, 600);
 
     // Assuming chesspiece.png is in the current directory
@@ -30,4 +31,5 @@ int main()
 {
     Application mainApp;
     mainApp.run();
+    return 0;
 }
