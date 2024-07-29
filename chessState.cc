@@ -42,14 +42,14 @@ std::pair<int, int> ChessState::rankFileToCoordinates(char file, char rank)
     return std::pair<int, int>{i, j};
 }
 
-bool ChessState::placePieceAtPosition(PieceType t, char file, char rank, int playerId)
+bool ChessState::placePieceAtPosition(PieceType t, char file, char rank, Color color)
 {
     std::pair<int, int> coords = rankFileToCoordinates(file, rank);
     if(!isCoordinateInBounds(coords)){
         return false;
     }
     // add piece to state here
-    board[coords.first][coords.second] = createPiece(t, playerId);
+    board[coords.first][coords.second] = createPiece(t, color);
 
     return true;
 }

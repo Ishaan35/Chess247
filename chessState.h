@@ -5,6 +5,7 @@
 #include <vector>
 #include <memory>
 #include "subject.h"
+#include "colorEnum.h"
 
 class ChessState : public Subject
 {
@@ -19,7 +20,7 @@ public:
     ChessState(const ChessState &other);
     const std::vector<std::vector<std::unique_ptr<Piece>>> &getBoard();
     void defaultSetup();
-    bool placePieceAtPosition(PieceType t, char file, char rank, int playerId);
+    bool placePieceAtPosition(PieceType t, char file, char rank, Color color);
     void playMove(InputMove &inputMove);
     bool isDraw();
     bool isCheckmate();
