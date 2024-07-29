@@ -50,6 +50,7 @@ bool ChessState::isCoordinateInBounds(std::pair<int, int> &coords)
     {
         return false;
     }
+    return true;
 }
 
 bool ChessState::isDraw() { return false; };
