@@ -43,6 +43,10 @@ bool ChessState::isDraw() { return false; };
 
 bool ChessState::isCheckmate() { return false; };
 
+bool ChessState::isValidMove(pair<int, int> toCoords, pair<int, int> fromCoords) {
+    return false;
+};
+
 void ChessState::playMove(InputMove &inputMove) {
     std::pair<int, int> fromCoords = rankFileToCoordinates(inputMove.from.first, inputMove.from.second);
     std::pair<int, int> toCoords = rankFileToCoordinates(inputMove.to.first, inputMove.to.second);

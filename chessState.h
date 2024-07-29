@@ -25,6 +25,7 @@ public:
     const std::vector<std::vector<std::unique_ptr<Piece>>> &getBoard();
     void defaultSetup();
     bool placePieceAtPosition(PieceType t, char file, char rank, Color color);
+    bool isValidMove(pair<int, int> toCoords, pair<int, int> fromCoords);
     void playMove(InputMove &inputMove);
     bool isDraw();
     bool isCheckmate();
