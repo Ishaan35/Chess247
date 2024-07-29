@@ -3,6 +3,7 @@
 
 #include <unordered_map>
 #include <string>
+#include "../colorEnum.h"
 
 // Define the enum for chess pieces
 enum class PieceType
@@ -24,7 +25,7 @@ struct PieceEnumAttributes
 class PieceTypeConverter
 {
 public:
-    static const PieceEnumAttributes &getPieceAttributes(int playerId, PieceType pieceType);
+    static const PieceEnumAttributes &getPieceAttributes(Color color, PieceType pieceType);
     static const PieceType charToPieceType(char piece);
 
 private:

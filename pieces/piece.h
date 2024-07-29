@@ -21,6 +21,6 @@ public:
     virtual ~Piece() = default;
     vector<PossibleMove> getPossibleMoves(pair<int, int> position, int rows, int cols);
     PieceType getType();
-    int getPlayerId();
+    Color getColor();
 };
 #endif

@@ -20,10 +20,10 @@ class ChessGame{
 public:
     ChessGame(weak_ptr<InputSource> input);
 
-    void runGame(vector<weak_ptr<Player>> allPlayers); // calls play move in loop, prompts each player for a move, and if there is no remaining pieces, then game is done. nested loop
+    void runGame(weak_ptr<Player> whitePlayer, weak_ptr<Player> blackPlayer); // calls play move in loop, prompts each player for a move, and if there is no remaining pieces, then game is done. nested loop
     // checks if move is resign, sets player pointer to null 
 
     weak_ptr<Player> getWinner(vector<weak_ptr<Player>> remainingPlayers); 
 
-    void setup(int numPlayers);
+    void setup();
 };

@@ -5,7 +5,7 @@ std::unique_ptr<Piece> createPiece(PieceType t, Color color)
     return std::unique_ptr<Piece>();
 }
 
-int Piece::getPlayerId()
+Color Piece::getColor()
 {
     return color;
 }

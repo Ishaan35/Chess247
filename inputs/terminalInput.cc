@@ -26,7 +26,7 @@ SetupMove TerminalInput::getSetup(){
         cin >> token;
         if (token == "black" || token == "white"){
             move.isChangeTurn = true;
-            move.playerIndex == (token == "white") ? 0 : 1;
+            move.playerColor == (token == "white") ? Color::WHITE : Color::BLACK;
         }
         else{
             throw std::runtime_error("incorrect colour specified");  
@@ -38,7 +38,7 @@ SetupMove TerminalInput::getSetup(){
         if (token.length() > 1){
             throw std::runtime_error("represent piece with 1 char");  
         }
-        move.playerIndex = isupper(token[0]) ? 0 : 1;
+        move.playerColor = isupper(token[0]) ? Color::WHITE : Color::BLACK;
         char piece = tolower(token[0]);
         if (piece == 'k'){
             move.pieceType = PieceType::King;

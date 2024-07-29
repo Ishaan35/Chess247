@@ -20,18 +20,17 @@ void Application::run() {
 	while(cin >> command) {
 		if(command == "setup") {
 			cout << "Enter in number of players" << endl;
-			cin >> numOfPlayers;
-			game.setup(numOfPlayers);
+			game.setup();
 		}
 		else if(command == "game") {
 			vector<weak_ptr<Player>> gamePlayers;
-			for(int i = 0;i < numOfPlayers; i++) {
+			for(int i = 0;i < 2; i++) {
 				string playerName;
-				for(auto thing: players) {
-					gamePlayers.push_back(thing.second);
-				}
+				cin >> playerName;
+
+				gamePlayers.push_back(players[playerName]);
 			}
-			game.runGame(gamePlayers);
+			game.runGame(gamePlayers[0], gamePlayers[1]);
 		}
 		else if(command == "addp") {
 			char type;

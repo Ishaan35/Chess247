@@ -20,10 +20,10 @@ weak_ptr<Player> ChessGame::getWinner(vector<weak_ptr<Player>> remainingPlayers)
     return nullPlayer;
 }
 
-void ChessGame::runGame(vector<weak_ptr<Player>> allPlayers){
+void ChessGame::runGame(weak_ptr<Player> whitePlayer, weak_ptr<Player> blackPlayer){
     chessState->setGameRunning();
 
-    players = allPlayers;
+    players = {whitePlayer, blackPlayer};
     numActive = players.size();
     while (true){
         for (size_t i=0; i < players.size(); i++){
@@ -54,7 +54,7 @@ void ChessGame::runGame(vector<weak_ptr<Player>> allPlayers){
     }   
 }
 // setup get the dimensions
-void ChessGame::setup(int numPlayers){
+void ChessGame::setup(){
     int rows = 0;
     int cols = 0;
     if (auto inputLocked = input.lock()) {

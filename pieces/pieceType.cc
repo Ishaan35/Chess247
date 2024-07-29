@@ -30,11 +30,9 @@ const std::unordered_map<char, PieceType> PieceTypeConverter::characterPieceMapp
     {'p', PieceType::Pawn},
     {'r', PieceType::Rook}};
 
-const PieceEnumAttributes &PieceTypeConverter::getPieceAttributes(int playerIndex, PieceType pieceType)
+const PieceEnumAttributes &PieceTypeConverter::getPieceAttributes(Color playerColor, PieceType pieceType)
 {
-    if (playerIndex < 0 || playerIndex >= 2)
-        throw std::out_of_range("Invalid player index");
-    return playerPieceMappings[playerIndex].at(pieceType);
+    return playerPieceMappings[playerColor].at(pieceType);
 }
 const PieceType PieceTypeConverter::charToPieceType(char piece){
     return characterPieceMappings.at(piece);

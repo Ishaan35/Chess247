@@ -3,10 +3,11 @@
 using namespace std;
 #include <utility>
 #include "../pieces/pieceType.h"
+#include "../colorEnum.h"
 
 struct SetupMove
 {
-    int playerIndex = 0;
+    Color playerColor;
     char file;
     char rank;
     bool isPlace = false;
