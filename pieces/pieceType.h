@@ -20,6 +20,7 @@ struct PieceEnumAttributes
 {
     char character;
     std::string filename;
+    int value;
 };
 
 class PieceTypeConverter

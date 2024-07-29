@@ -3,18 +3,18 @@
 
 // Define the mappings for each player
 const std::unordered_map<PieceType, PieceEnumAttributes> PieceTypeConverter::playerPieceMappings[2] = {
-    {{PieceType::King, {'K', "WhiteKing.png"}},
-     {PieceType::Queen, {'Q', "WhiteQueen.png"}},
-     {PieceType::Bishop, {'B', "WhiteBishop.png"}},
-     {PieceType::Knight, {'N', "WhiteKnight.png"}},
-     {PieceType::Pawn, {'P', "WhitePawn.png"}},
-     {PieceType::Rook, {'R', "WhiteRook.png"}}},
-    {{PieceType::King, {'k', "BlackKing.png"}},
-     {PieceType::Queen, {'q', "BlackQueen.png"}},
-     {PieceType::Bishop, {'b', "BlackBishop.png"}},
-     {PieceType::Knight, {'n', "BlackKnight.png"}},
-     {PieceType::Pawn, {'p', "BlackPawn.png"}},
-     {PieceType::Rook, {'r', "BlackRook.png"}}}};
+    {{PieceType::King, {'K', "WhiteKing.png", 10000}},
+     {PieceType::Queen, {'Q', "WhiteQueen.png", 9}},
+     {PieceType::Bishop, {'B', "WhiteBishop.png", 3}},
+     {PieceType::Knight, {'N', "WhiteKnight.png", 3}},
+     {PieceType::Pawn, {'P', "WhitePawn.png", 1}},
+     {PieceType::Rook, {'R', "WhiteRook.png", 5}}},
+    {{PieceType::King, {'k', "BlackKing.png", 10000}}, // all of the pieces together cannot sum to 10000, so it is a good value for the king (for computer evaluation)
+     {PieceType::Queen, {'q', "BlackQueen.png", 9}},
+     {PieceType::Bishop, {'b', "BlackBishop.png", 3}},
+     {PieceType::Knight, {'n', "BlackKnight.png", 3}},
+     {PieceType::Pawn, {'p', "BlackPawn.png", 1}},
+     {PieceType::Rook, {'r', "BlackRook.png", 5}}}};
 
 const std::unordered_map<char, PieceType> PieceTypeConverter::characterPieceMappings = {
     {'K', PieceType::King},
