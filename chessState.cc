@@ -137,7 +137,7 @@ void ChessState::defaultSetup()
     placePieceAtPosition(PieceType::Bishop, 'f', '1', Color::WHITE);
     placePieceAtPosition(PieceType::Knight, 'g', '1', Color::WHITE);
     placePieceAtPosition(PieceType::Rook, 'h', '1', Color::WHITE);
-    for (int i = 0; i < 8; i++)
+    for (size_t i = 0; i < board[0].size(); i++)
     {
         placePieceAtPosition(PieceType::Pawn, (char)('a' + i), '2', Color::WHITE);
     }
@@ -150,7 +150,7 @@ void ChessState::defaultSetup()
     placePieceAtPosition(PieceType::Bishop, 'f', '8', Color::BLACK);
     placePieceAtPosition(PieceType::Knight, 'g', '8', Color::BLACK);
     placePieceAtPosition(PieceType::Rook, 'h', '8', Color::BLACK);
-    for (int i = 0; i < 8; i++)
+    for (size_t i = 0; i < board[0].size(); i++)
     {
         placePieceAtPosition(PieceType::Pawn, (char)('a' + i), '7', Color::BLACK);
     }
