@@ -15,6 +15,12 @@ PieceType Piece::getType()
     return type;
 }
 
-vector<PossibleMove> Piece::getPossibleMoves(pair<int, int> position, int rows, int cols) {
+vector<PossibleMove> Piece::getPossibleMoves(pair<int, int> position, int rows, int cols)
+{
     return m->getPossibleMoves(position, rows, cols);
+}
+
+bool Piece::hasMoved() const
+{
+    return hasMoved;
 }
