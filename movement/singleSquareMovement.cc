@@ -22,6 +22,14 @@ vector<PossibleMove>& SingleSquareMovement::getPossibleMoves(pair<int,int> posit
 			}
 		}
 	}
+
+	if(0 <= position.second - 2) {
+		res.push_back(PossibleMove{position, make_pair(position.first, position.second - 2), false, true, true});
+	}
 	
+	if(position.second + 2 < cols) {
+		res.push_back(PossibleMove{position, make_pair(position.first, position.second + 2), false, true, true});
+	}
+
 	return res;
 };

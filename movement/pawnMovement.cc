@@ -21,7 +21,7 @@ vector<PossibleMove>& PawnMovement::getPossibleMoves(pair<int,int> position, int
 			res.push_back(PossibleMove{position, make_pair(newX1, position.second+1), true, false});
 		}
 		if(0 <= newX2 && newX2 < rows) {
-			res.push_back(PossibleMove{position, make_pair(newX2, position.second), false, true});
+			res.push_back(PossibleMove{position, make_pair(newX2, position.second), false, true, true});
 		}
 	}
 
