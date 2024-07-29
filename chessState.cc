@@ -1,6 +1,10 @@
 #include "chessState.h"
 #include "./pieces/pieceFactory.h"
 
+void ChessState::setWinner(Color winnerColor){
+    winner = winnerColor;
+}
+
 void ChessState::setGameRunning()
 {
     isGameRunning = true;
