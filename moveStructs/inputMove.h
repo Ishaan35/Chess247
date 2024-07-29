@@ -5,8 +5,8 @@ using namespace std;
 
 struct InputMove
 {
-    pair<int, int> from;
-    pair<int, int> to;
+    pair<char, char> from;
+    pair<char, char> to;
     bool isResign;
 };
 

@@ -1,12 +1,14 @@
 #include "chessGame.h"
 #include <vector>
+#include <iostream>
 using namespace std;
 
 ChessGame::ChessGame(weak_ptr<InputSource> input) : input{input}, players{}, numActive{0} {};
 // set isGameRunning to true in chess state
-// runGame takes in a vector of players
 // im getting white then black in player vector
 // white is 0 black is 1
+
+// need to play move and place piece during setup right now
 
 weak_ptr<Player> ChessGame::getWinner(vector<weak_ptr<Player>> remainingPlayers){
     for (size_t i=0; i < remainingPlayers.size(); i++){
@@ -14,9 +16,13 @@ weak_ptr<Player> ChessGame::getWinner(vector<weak_ptr<Player>> remainingPlayers)
             return remainingPlayers[i];
         }
     }
+    weak_ptr<Player> nullPlayer;
+    return nullPlayer;
 }
 
 void ChessGame::runGame(vector<weak_ptr<Player>> allPlayers){
+    chessState->setGameRunning();
+
     players = allPlayers;
     numActive = players.size();
     while (true){
@@ -37,11 +43,12 @@ void ChessGame::runGame(vector<weak_ptr<Player>> allPlayers){
                     if (auto winnerLocked = winner.lock()){
                         winnerLocked->incrementWon();
                     }
+                    // figure out how to display winner/notify observers
                     return;
                 }
             }
             else{
-                throw std::runtime_error("input source no longer exists"); 
+                continue;
             }
         }
     }   
@@ -55,13 +62,12 @@ void ChessGame::setup(int numPlayers){
         rows = dimensions.first;
         cols = dimensions.second;
     }
-    ChessState chessState = ChessState{players, rows, cols};
-
+    chessState = std::make_shared<ChessState>(players, rows, cols);
     while(true){
         if (auto inputLocked = input.lock()){
             SetupMove setupMove = inputLocked->getSetup();
+
             if (setupMove.isDone) break;
-            
         }
         else{
             throw std::runtime_error("input source no longer exists"); 

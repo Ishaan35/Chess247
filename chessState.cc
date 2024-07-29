@@ -1,11 +1,31 @@
 #include "chessState.h"
 #include "./pieces/pieceFactory.h"
 
+void ChessState::setGameRunning(){
+    isGameRunning = true;
+}
+
+bool ChessState::isCoordinateInBounds(std::pair<int, int>& coords){
+    if (coords.first >= static_cast<int>(board.size()) || coords.second >= static_cast<int>(board[0].size()) || coords.first < 0 || coords.second < 0)
+    {
+        return false;
+    }
+}
+
 bool ChessState::isDraw() { return false; };
 
 bool ChessState::isCheckmate() { return false; };
 
-void ChessState::playMove(InputMove &inputMove) {};
+void ChessState::playMove(InputMove &inputMove) {
+    std::pair<int, int> fromCoords = rankFileToCoordinates(inputMove.from.first, inputMove.from.second);
+    std::pair<int, int> toCoords = rankFileToCoordinates(inputMove.to.first, inputMove.to.second);
+
+    if (!isCoordinateInBounds(fromCoords) || !isCoordinateInBounds(toCoords)){
+        throw std::runtime_error("provided coordinates are not in bounds"); 
+    }
+
+    
+};
 
 ChessState::ChessState(const std::vector<std::weak_ptr<Player>> &players, int rows, int columns) : players{players}, board(rows) // r x c grid all nullptr by default
 {
@@ -25,11 +45,9 @@ std::pair<int, int> ChessState::rankFileToCoordinates(char file, char rank)
 bool ChessState::placePieceAtPosition(PieceType t, char file, char rank, int playerId)
 {
     std::pair<int, int> coords = rankFileToCoordinates(file, rank);
-    if (coords.first >= static_cast<int>(board.size()) || coords.second >= static_cast<int>(board[0].size()) || coords.first < 0 || coords.second < 0)
-    {
+    if(!isCoordinateInBounds(coords)){
         return false;
     }
-
     // add piece to state here
     board[coords.first][coords.second] = createPiece(t, playerId);
 

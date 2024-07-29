@@ -23,6 +23,8 @@ public:
     void playMove(InputMove &inputMove);
     bool isDraw();
     bool isCheckmate();
+    void setGameRunning();
+    bool isCoordinateInBounds(std::pair<int, int>& coords);
     ~ChessState();
 };
 

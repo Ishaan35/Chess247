@@ -11,6 +11,8 @@ class TerminalInput : public InputSource
 	SetupMove getSetup() override;
 
 	pair<int, int> getDimensions();
+
+	bool processPosition(string token, char& file, char& rank);
 };
 
 #endif
