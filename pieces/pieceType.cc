@@ -34,6 +34,12 @@ const PieceEnumAttributes &PieceTypeConverter::getPieceAttributes(Color playerCo
 {
     return playerPieceMappings[playerColor].at(pieceType);
 }
-const PieceType PieceTypeConverter::charToPieceType(char piece){
+const PieceType PieceTypeConverter::charToPieceType(char piece)
+{
     return characterPieceMappings.at(piece);
+}
+
+const bool PieceTypeConverter::isValidPiece(PieceType p)
+{
+    return playerPieceMappings[0].count(p) > 0;
 }

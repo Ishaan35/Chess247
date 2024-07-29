@@ -27,10 +27,11 @@ class PieceTypeConverter
 public:
     static const PieceEnumAttributes &getPieceAttributes(Color color, PieceType pieceType);
     static const PieceType charToPieceType(char piece);
+    static const bool PieceTypeConverter::isValidPiece(PieceType p);
 
 private:
     static const std::unordered_map<PieceType, PieceEnumAttributes> playerPieceMappings[2];
     static const std::unordered_map<char, PieceType> characterPieceMappings;
 };
 
-#endif 
+#endif

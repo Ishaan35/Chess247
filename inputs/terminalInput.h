@@ -3,6 +3,7 @@
 
 #include "inputSource.h"
 #include "../moveStructs/setupMove.h"
+#include "../pieces/pieceType.h"
 
 class TerminalInput : public InputSource
 {
@@ -12,7 +13,7 @@ class TerminalInput : public InputSource
 
 	pair<int, int> getDimensions();
 
-	bool processPosition(string token, char& file, char& rank);
+	bool processPosition(string token, char &file, char &rank);
 };
 
 #endif
