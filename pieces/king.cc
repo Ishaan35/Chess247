@@ -1,6 +1,8 @@
 #include "king.h"
+#include "../movement/singleSquareMovement.h"
+#include "../movement/emptyMovement.h"
 
-King::King(PieceType t, int pId) : Piece{t, pId}
+King::King(PieceType t, Color color) : Piece{t, color, new SingleSquareMovement{new EmptyMovement{}, color}}
 {
     // initialize movement here
 }

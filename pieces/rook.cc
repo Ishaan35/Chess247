@@ -1,6 +1,9 @@
 #include "rook.h"
+#include "../movement/horizontalMovement.h"
+#include "../movement/verticalMovement.h"
+#include "../movement/emptyMovement.h"
 
-Rook::Rook(PieceType t, int pId) : Piece{t, pId}
+Rook::Rook(PieceType t, Color color) : Piece{t, color, new HorizontalMovement{new VerticalMovement{new EmptyMovement{}, color}, color}}
 {
     // initialize movement here
 }

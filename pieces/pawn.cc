@@ -1,6 +1,8 @@
 #include "pawn.h"
+#include "../movement/pawnMovement.h"
+#include "../movement/emptyMovement.h"
 
-Pawn::Pawn(PieceType t, int pId) : Piece{t, pId}
+Pawn::Pawn(PieceType t, Color color) : Piece{t, color, new PawnMovement{new EmptyMovement{}, color}}
 {
     // initialize movement here
 }

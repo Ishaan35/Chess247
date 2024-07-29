@@ -5,7 +5,7 @@
 class Bishop : public Piece
 {
 public:
-    Bishop(PieceType t, int pId);
+    Bishop(PieceType t, Color color);
     std::unique_ptr<Piece> clone() override;
 };
 

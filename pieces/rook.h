@@ -5,7 +5,7 @@
 class Rook : public Piece
 {
 public:
-    Rook(PieceType t, int pId);
+    Rook(PieceType t, Color color);
     std::unique_ptr<Piece> clone() override;
 };
 

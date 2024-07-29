@@ -4,7 +4,7 @@
 
 class Pawn: public Piece{
 public:
-    Pawn(PieceType t, int pId);
+    Pawn(PieceType t, Color color);
     std::unique_ptr<Piece> clone() override;
 };
 
