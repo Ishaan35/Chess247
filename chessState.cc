@@ -5,6 +5,30 @@ void ChessState::setGameRunning(){
     isGameRunning = true;
 }
 
+void ChessState::setResign(bool target){
+    resign = target;
+}
+
+void ChessState::setDraw(bool target){
+    draw = target;
+}
+
+void ChessState::setCheckmate(bool target){
+    checkmate = target;
+}
+
+bool ChessState::getDraw(){
+    return draw;
+}
+
+bool ChessState::getResign(){
+    return resign;
+}
+
+bool ChessState::getCheckmate(){
+    return checkmate;
+}
+
 bool ChessState::isCoordinateInBounds(std::pair<int, int>& coords){
     if (coords.first >= static_cast<int>(board.size()) || coords.second >= static_cast<int>(board[0].size()) || coords.first < 0 || coords.second < 0)
     {

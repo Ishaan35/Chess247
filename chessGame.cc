@@ -30,6 +30,7 @@ void ChessGame::runGame(weak_ptr<Player> whitePlayer, weak_ptr<Player> blackPlay
             if(auto lockedPlayer = players[i].lock()){
                 InputMove currentMove = lockedPlayer->getMove();
                 if(currentMove.isResign){
+                    
                     players[i].reset();
                     numActive--;
                 }
