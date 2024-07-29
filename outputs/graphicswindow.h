@@ -19,7 +19,7 @@ public:
 
     ~GraphicsWindow();
 
-    void renderPNG(const std::string &filename, int target_width, int target_height);
+    void renderPNG(const std::string &filename, int target_width, int target_height, int x, int y);
     void drawRectangle(int x, int y, int rect_width, int rect_height, int red, int green, int blue);
 
     void drawText(const std::string &text, int x, int y, double font_size, int red, int green, int blue);

@@ -1,8 +1,8 @@
 #include "graphicsDisplay.h"
 #include "../pieces/pieceType.h"
 
-GraphicsDisplay::GraphicsDisplay(int n, int w, int h, int squarew) : numPlayers{n}, width{w}, height{h}, squareWidth{squarew}, darkSquareColor{Color{184, 134, 97}}, lightSquareColor{
-                                                                                                                                                                         Color{238, 215, 174}},
+GraphicsDisplay::GraphicsDisplay(int n, int w, int h, int squarew) : numPlayers{n}, width{w}, height{h}, squareWidth{squarew}, darkSquareColor{RGBColor{184, 134, 97}}, lightSquareColor{
+                                                                                                                                                                            RGBColor{238, 215, 174}},
                                                                      window{std::make_unique<GraphicsWindow>(w, h)}
 {
     // Assuming chesspiece.png is in the current directory
@@ -50,7 +50,7 @@ void GraphicsDisplay::renderToScreen(const std::vector<std::vector<std::unique_p
             }
             if (board[i][j])
             {
-                window->renderPNG(PieceTypeConverter::getPieceAttributes(board[i][j]->getColor(), board[i][j]->getType()).filename, squareWidth, squareWidth);
+                window->renderPNG(PieceTypeConverter::getPieceAttributes(board[i][j]->getColor(), board[i][j]->getType()).filename, squareWidth, squareWidth, x, y);
             }
         }
         std::cout << std::endl;

@@ -10,12 +10,12 @@
 #include <stdexcept>
 #include "graphicswindow.h"
 
-struct Color
+struct RGBColor
 {
     int red;
     int green;
     int blue;
-    Color(int r, int g, int b) : red{r}, green{g}, blue{b} {}
+    RGBColor(int r, int g, int b) : red{r}, green{g}, blue{b} {}
 };
 
 class GraphicsDisplay : public Observer
@@ -25,8 +25,8 @@ class GraphicsDisplay : public Observer
     int width;
     int height;
     int squareWidth;
-    Color darkSquareColor;
-    Color lightSquareColor;
+    RGBColor darkSquareColor;
+    RGBColor lightSquareColor;
     std::unique_ptr<GraphicsWindow> window;
 
 public:

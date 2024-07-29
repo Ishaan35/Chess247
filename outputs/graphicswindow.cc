@@ -29,7 +29,7 @@ GraphicsWindow::~GraphicsWindow()
     XCloseDisplay(display);
 }
 
-void GraphicsWindow::renderPNG(const std::string &filename, int target_width, int target_height)
+void GraphicsWindow::renderPNG(const std::string &filename, int target_width, int target_height, int x, int y)
 {
     cairo_t *cr = cairo_create(surface);
 
@@ -53,12 +53,21 @@ void GraphicsWindow::renderPNG(const std::string &filename, int target_width, in
     double scale_x = static_cast<double>(target_width) / img_width;
     double scale_y = static_cast<double>(target_height) / img_height;
 
-    // Scale image if necessary
+    // Save the current state of the context
+    cairo_save(cr);
+
+    // Translate to the desired position
+    cairo_translate(cr, x, y);
+
+    // Scale image
     cairo_scale(cr, scale_x, scale_y);
 
     // Paint the scaled image onto the surface
     cairo_set_source_surface(cr, image, 0, 0);
     cairo_paint(cr);
+
+    // Restore the previous state of the context
+    cairo_restore(cr);
 
     // Clean up
     cairo_surface_destroy(image);
