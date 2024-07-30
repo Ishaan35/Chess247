@@ -128,8 +128,6 @@ bool ChessState::isTargeted(Color color, pair<int, int> position)
         {
             if (board[i][j] && board[i][j]->getColor() == oppositeColor)
             {
-                if (i == row && j == col)
-                    return true; // opponent's piece is right on top of the given position, our convention is that it's targetted
                 pair<int, int> opponent{i, j};
                 vector<PossibleMove> possibleMoves = board[i][j]->getPossibleMoves(opponent, board);
                 for (size_t k = 0; k < possibleMoves.size(); k++)
@@ -325,15 +323,16 @@ bool ChessState::isValidMove(PossibleMove move, char promotion)
     if (!isPossibleMove)
         return false;
 
+    // make sure if king is being moved, it is not moving into a check (regardless of whether its capturing a piece or not)
+    if (fromPiece->getType() == PieceType::King && isTargeted(fromPiece->getColor(), to))
+    {
+        return false;
+    }
+
     // categorize as capture, move, or castle
     // if normal move (no capture) - could still be en passant
     if (!toPiece)
     {
-        // if King is being moved, make sure not moving into check
-        if (fromPiece->getType() == PieceType::King && isTargeted(fromPiece->getColor(), to))
-        {
-            return false;
-        }
         return true;
     }
     else if (toPiece && toPiece->getColor() != fromPiece->getColor())
@@ -485,7 +484,7 @@ ChessState::ChessState(const ChessState &other) : players{other.players}, isGame
 
 ChessState::~ChessState() {}
 
-const std::vector<std::vector<std::unique_ptr<Piece>>> &ChessState::getBoard()
+const std::vector<std::vector<std::unique_ptr<Piece>>> &ChessState::getBoard() const
 {
     return board;
 }

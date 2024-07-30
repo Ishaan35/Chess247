@@ -1,6 +1,7 @@
 #include "application.h"
 #include <iostream>
 #include <string>
+#include <memory>
 #include "./inputs/terminalInput.h"
 #include "chessGame.h"
 #include "./players/humanPlayer.h"
@@ -13,11 +14,20 @@ using namespace std;
 Application::Application() : in{make_shared<TerminalInput>()} {
 							 };
 
+void Application::printHighScores() {
+	cout << "Final Scores (games won):" << endl;
+	for(const auto & it: players) {
+		cout << it.second->getName() << ": " << it.second->getGamesWon() << endl;
+	}
+}
+
 void Application::run()
 {
 
 	string command;
 	ChessGame game{in};
+	shared_ptr<Engine> chessEngine = make_shared<Engine>();
+
 
 	std::shared_ptr<Observer> graphicsDisplay = std::make_shared<GraphicsDisplay>(2, 800, 800, 100);
 	std::shared_ptr<Observer> textDisplay = std::make_shared<TextDisplay>(2);
@@ -42,7 +52,7 @@ void Application::run()
 
 				gamePlayers.push_back(players[playerName]);
 			}
-			game.runGame(gamePlayers[0], gamePlayers[1], observers);
+			game.runGame(gamePlayers[0], gamePlayers[1], observers, chessEngine);
 		}
 		else if (command == "addp")
 		{
@@ -58,23 +68,33 @@ void Application::run()
 			{
 				int level;
 				cin >> level;
-				players[name] = make_shared<ComputerPlayer>(level, name);
+				players[name] = make_shared<ComputerPlayer>(level, name, chessEngine);
 			}
+			cout << "Added player " << type << " " << name << endl;
 		}
 		else if (command == "removep")
 		{
 			string playerName;
 			cin >> playerName;
 			players.erase(playerName);
+			cout << "Removed player " << playerName << endl;
+		}
+		else if(command == "viewp") {
+			cout << "Current Players Are: " << endl;
+			for(const auto& it: players) {
+				cout << it.second->getName() << endl;
+			}
 		}
 		else if (command == "quit")
 		{
-			cout << "GAME HAS ENDED, GO STUDY FOR EXAMS" << endl;
+			cout << "Game has ended" << endl;
 			break;
 		}
 		else
 		{
-			cout << "BRO YOU GAVE ME SOME INCOMPREHENSIBLE SH**" << endl;
+			cout << "Sorry, invalid command" << endl;
 		}
 	}
+
+
 }

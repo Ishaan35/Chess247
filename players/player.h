@@ -14,12 +14,16 @@ class Player
     std::string name;
     int gamesWon;
     int rating;
+protected:
+    Color playerColor;
 
 public:
     Player(std::string name);
     virtual InputMove getMove() = 0;
     std::string getName();
     void incrementWon();
+    int getGamesWon();
+    void setPlayerColor(Color color);
 };
 
 #endif

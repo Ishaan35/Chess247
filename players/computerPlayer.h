@@ -5,16 +5,12 @@
 
 class ComputerPlayer : public Player
 {
-	Color playerColor;
 	weak_ptr<Engine> engine;
 	int level;
 public: 
 	InputMove getMove() override;
 
-	ComputerPlayer(int level, string name);
-
-	void setEngine(weak_ptr<Engine> eng, Color playerCol);
-
+	ComputerPlayer(int level, string name, weak_ptr<Engine> eng);
 };
 
 #endif

@@ -10,3 +10,11 @@ std::string Player::getName()
 
 
 void Player::incrementWon() {gamesWon++;}
+
+int Player::getGamesWon() {
+    return gamesWon;
+}
+
+void Player::setPlayerColor(Color color) {
+    playerColor = color;
+}

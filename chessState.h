@@ -25,7 +25,7 @@ class ChessState : public Subject
 public:
     ChessState(const std::vector<std::weak_ptr<Player>> &players, int rows, int columns);
     ChessState(const ChessState &other);
-    const std::vector<std::vector<std::unique_ptr<Piece>>> &getBoard();
+    const std::vector<std::vector<std::unique_ptr<Piece>>> &getBoard() const;
     void defaultSetup();
     bool removePiece(char file, char rank);
     bool placePieceAtPosition(PieceType t, char file, char rank, Color color, bool isSetup = false);

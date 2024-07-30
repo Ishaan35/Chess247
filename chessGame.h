@@ -6,6 +6,7 @@
 #include "chessState.h"
 #include "./colorEnum.h"
 #include "./pieces/pieceFactory.h"
+#include "engine.h"
 
 using namespace std;
 
@@ -23,7 +24,7 @@ class ChessGame{
 public:
     ChessGame(weak_ptr<InputSource> input);
 
-    void runGame(weak_ptr<Player> whitePlayer, weak_ptr<Player> blackPlayer, std::vector<std::shared_ptr<Observer>> observers); // calls play move in loop, prompts each player for a move, and if there is no remaining pieces, then game is done. nested loop
+    void runGame(weak_ptr<Player> whitePlayer, weak_ptr<Player> blackPlayer, std::vector<std::shared_ptr<Observer>> observers, shared_ptr<Engine> chessEngine); // calls play move in loop, prompts each player for a move, and if there is no remaining pieces, then game is done. nested loop
     // checks if move is resign, sets player pointer to null
 
     weak_ptr<Player> getWinner(vector<weak_ptr<Player>> remainingPlayers);

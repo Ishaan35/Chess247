@@ -1,6 +1,6 @@
 #include "computerPlayer.h"
 
-ComputerPlayer::ComputerPlayer(int level, string name): Player{"Computer" + to_string(level) + name}, level{level} {}
+ComputerPlayer::ComputerPlayer(int level, string name, weak_ptr<Engine> engine): Player{"Computer" + to_string(level) + name}, level{level}, engine{engine} {}
 
 InputMove ComputerPlayer::getMove() {
 	if(auto lockedPtr = engine.lock()) {
@@ -9,9 +9,4 @@ InputMove ComputerPlayer::getMove() {
     {
         throw std::runtime_error("Engine source is no longer available.");
     }
-}
-
-void ComputerPlayer::setEngine(weak_ptr<Engine> eng, Color playerCol) {
-	engine = eng;
-	playerColor = playerCol;
 }

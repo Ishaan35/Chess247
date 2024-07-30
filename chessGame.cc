@@ -10,9 +10,19 @@ ChessGame::ChessGame(weak_ptr<InputSource> input) : input{input}, players{}, num
 
 // need to play move and place piece during setup right now
 
-void ChessGame::runGame(weak_ptr<Player> whitePlayer, weak_ptr<Player> blackPlayer, std::vector<std::shared_ptr<Observer>> observers)
+void ChessGame::runGame(weak_ptr<Player> whitePlayer, weak_ptr<Player> blackPlayer, std::vector<std::shared_ptr<Observer>> observers, shared_ptr<Engine> engine)
 {
     players = {whitePlayer, blackPlayer};
+
+    if(auto lockedWhitePlayer = whitePlayer.lock()) {
+        lockedWhitePlayer->setPlayerColor(Color::WHITE);
+    }
+
+    if(auto lockedBlackPlayer = blackPlayer.lock()) {
+        lockedBlackPlayer->setPlayerColor(Color::BLACK);
+    }
+
+
     numActive = players.size();
     // if we did not initialize the chess state in setup, do it here
     if (!chessState)
@@ -25,6 +35,10 @@ void ChessGame::runGame(weak_ptr<Player> whitePlayer, weak_ptr<Player> blackPlay
             obs->setSubject(chessState, obs);
         }
     }
+
+    // set the state in the engine
+    engine->setChessState(chessState);
+
     while (true)
     {
         for (size_t i = 0; i < players.size(); i++)
