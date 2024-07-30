@@ -14,33 +14,34 @@ void ChessGame::runGame(weak_ptr<Player> whitePlayer, weak_ptr<Player> blackPlay
 {
     players = {whitePlayer, blackPlayer};
 
-    if(auto lockedWhitePlayer = whitePlayer.lock()) {
+    if (auto lockedWhitePlayer = whitePlayer.lock())
+    {
         lockedWhitePlayer->setPlayerColor(Color::WHITE);
     }
 
-    if(auto lockedBlackPlayer = blackPlayer.lock()) {
+    if (auto lockedBlackPlayer = blackPlayer.lock())
+    {
         lockedBlackPlayer->setPlayerColor(Color::BLACK);
     }
-
 
     numActive = players.size();
     // if we did not initialize the chess state in setup, do it here
     if (!chessState)
     {
         chessState = std::make_shared<ChessState>(players, 8, 8);
-        chessState->setGameRunning(true);
         chessState->defaultSetup();
         for (auto &obs : observers)
         {
             obs->setSubject(chessState, obs);
         }
     }
+    chessState->setGameRunning(true);
 
     // set the state in the engine
     engine->setChessState(chessState);
 
     while (true)
-    {   
+    {
         Color currentTurn = chessState->getPlayerTurn();
         if (auto lockedPlayer = players[currentTurn].lock())
         {
@@ -61,18 +62,16 @@ void ChessGame::runGame(weak_ptr<Player> whitePlayer, weak_ptr<Player> blackPlay
                     else
                     {
                         chessState->playMove(currentMove);
-                        if (chessState->isCheckmate())
+                        if (chessState->calculateCheckmate())
                         {
                             Color winnerColor = currentTurn == Color::WHITE ? Color::BLACK : Color::WHITE;
-                            chessState->setCheckmate(true);
                             chessState->setWinner(winnerColor);
-                            std::cout << "you checkmated them W " << std::endl;
+                            chessState->setCheckmate(true);
                             return;
                         }
                         if (chessState->isDraw())
                         {
                             chessState->setDraw(true);
-                            std::cout << "it's a stalemate lol" << std::endl;
                             return;
                         }
                     }
@@ -128,12 +127,14 @@ void ChessGame::setup(std::vector<std::shared_ptr<Observer>> observers)
             }
             if (setupMove.isDone)
             {
-                try{
+                try
+                {
                     chessState->verifySetup(); // verify chess board setup
                     cout << "setup is valid!";
                     break;
                 }
-                catch(std::runtime_error(e)){
+                catch (std::runtime_error(e))
+                {
                     cout << e.what() << endl;
                 }
             }

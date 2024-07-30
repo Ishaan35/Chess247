@@ -53,13 +53,16 @@ void TextDisplay::notify()
     {
         const std::vector<std::vector<std::unique_ptr<Piece>>> &board = chessState->getBoard();
         renderToTerminal(board);
-        if (chessState->isCheckmate())
+        if (chessState->isGameRunning())
         {
-            std::cout << "Game Over By Checkmate..." << ((chessState->getWinner() == Color::BLACK) ? " Black wins" : " White wins") << std::endl;
-        }
-        else if (chessState->isDraw())
-        {
-            std::cout << "Game Over By Stalemate..." << std::endl;
+            if (chessState->getCheckmate())
+            {
+                std::cout << "Game Over By Checkmate..." << ((chessState->getWinner() == Color::BLACK) ? " Black wins" : " White wins") << std::endl;
+            }
+            else if (chessState->isDraw())
+            {
+                std::cout << "Game Over By Stalemate..." << std::endl;
+            }
         }
     }
 }

@@ -12,11 +12,11 @@ class ChessState : public Subject
 {
     const std::vector<std::weak_ptr<Player>> &players;
     std::vector<std::vector<std::unique_ptr<Piece>>> board; // convention: relative to white. So top left is a8 and bottom right is h1
-    bool isGameRunning = false;
+    bool gameRunning = false;
     bool isDefaultSetup = true;
-    bool resign;
-    bool draw;
-    bool checkmate;
+    bool resign = false;
+    bool draw = false;
+    bool checkmate = false;
     Color winner;
     Color currentTurn;
     std::pair<int, int> rankFileToCoordinates(char file, char rank);
@@ -33,8 +33,9 @@ public:
     void playMove(InputMove &inputMove);
     bool isDraw();
     bool isCheck();
-    bool isCheckmate();
+    bool calculateCheckmate();
     void setGameRunning(bool val);
+    bool isGameRunning();
     bool isCoordinateInBounds(std::pair<int, int> &coords);
     void setResign(bool target);
     void setDraw(bool target);

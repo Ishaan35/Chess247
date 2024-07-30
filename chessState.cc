@@ -79,14 +79,20 @@ void ChessState::setIsDefaultSetup(bool val)
 void ChessState::setWinner(Color winnerColor)
 {
     winner = winnerColor;
-    if(auto lockedPlayer = players[winnerColor].lock()) {
+    if (auto lockedPlayer = players[winnerColor].lock())
+    {
         lockedPlayer->incrementWon(false);
     }
 }
 
 void ChessState::setGameRunning(bool val)
 {
-    isGameRunning = val;
+    gameRunning = val;
+}
+
+bool ChessState::isGameRunning()
+{
+    return gameRunning;
 }
 
 void ChessState::setResign(bool target)
@@ -98,10 +104,12 @@ void ChessState::setResign(bool target)
 void ChessState::setDraw(bool target)
 {
     draw = target;
-    if(auto lockedWhite = players[0].lock()) {
+    if (auto lockedWhite = players[0].lock())
+    {
         lockedWhite->incrementWon(true);
     }
-    if(auto lockedBlack = players[1].lock()) {
+    if (auto lockedBlack = players[1].lock())
+    {
         lockedBlack->incrementWon(true);
     }
     notifyObservers();
@@ -116,6 +124,7 @@ void ChessState::setCheckmate(bool target)
 bool ChessState::getDraw()
 {
     return draw;
+    notifyObservers();
 }
 
 bool ChessState::getResign()
@@ -198,7 +207,7 @@ bool ChessState::isDraw()
     return true;
 }
 
-bool ChessState::isCheckmate()
+bool ChessState::calculateCheckmate()
 {
     for (size_t i = 0; i < board.size(); i++)
     {
@@ -392,7 +401,8 @@ void ChessState::safelyMove(unique_ptr<Piece> &fromPiece, pair<int, int> fromCoo
     board[fromCoords.first][fromCoords.second].reset();
 }
 
-Color ChessState::getPlayerTurn() {
+Color ChessState::getPlayerTurn()
+{
     return currentTurn;
 }
 
@@ -493,7 +503,7 @@ bool ChessState::placePieceAtPosition(PieceType t, char file, char rank, Color c
     return true;
 }
 
-ChessState::ChessState(const ChessState &other) : players{other.players}, isGameRunning{other.isGameRunning}, resign{other.resign}, draw{other.draw}, checkmate{other.checkmate}, winner{other.winner}
+ChessState::ChessState(const ChessState &other) : players{other.players}, gameRunning{other.gameRunning}, resign{other.resign}, draw{other.draw}, checkmate{other.checkmate}, winner{other.winner}
 {
     // Deep copy of the board
     for (size_t i = 0; i < other.board.size(); i++)
