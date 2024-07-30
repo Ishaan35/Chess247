@@ -3,40 +3,51 @@
 
 using namespace std;
 
-void ChessState::verifySetup(){
+void ChessState::verifySetup()
+{
     int whiteKingCount = 0;
     int blackKingCount = 0;
-    pair<int, int> whiteKingCoords{-1,-1};
-    pair<int, int> blackKingCoords{-1,-1};
+    pair<int, int> whiteKingCoords{-1, -1};
+    pair<int, int> blackKingCoords{-1, -1};
 
-    for (int i=0; i<board.size(); i++){
-        for (int j=0; j<board[i].size(); j++){
-            if (board[i][j]){
-                if(board[i][j]->getColor() == Color::WHITE && board[i][j]->getType() == PieceType::King){
+    for (int i = 0; i < board.size(); i++)
+    {
+        for (int j = 0; j < board[i].size(); j++)
+        {
+            if (board[i][j])
+            {
+                if (board[i][j]->getColor() == Color::WHITE && board[i][j]->getType() == PieceType::King)
+                {
                     whiteKingCount++;
-                    whiteKingCoords = {i,j};
+                    whiteKingCoords = {i, j};
                 }
-                else if(board[i][j]->getColor() == Color::BLACK && board[i][j]->getType() == PieceType::King){
+                else if (board[i][j]->getColor() == Color::BLACK && board[i][j]->getType() == PieceType::King)
+                {
                     blackKingCount++;
-                    blackKingCoords = {i,j};
+                    blackKingCoords = {i, j};
                 }
-                else if(board[i][j]->getType() == PieceType::Pawn && (i==0 || i==board.size()-1)){
+                else if (board[i][j]->getType() == PieceType::Pawn && (i == 0 || i == board.size() - 1))
+                {
                     throw std::runtime_error("pawn is on the back rank");
                 }
             }
         }
     }
-    if(whiteKingCount != 1){
+    if (whiteKingCount != 1)
+    {
         throw std::runtime_error("White must have exactly one king");
     }
-    if(blackKingCount != 1){
+    if (blackKingCount != 1)
+    {
         throw std::runtime_error("Black must have exactly one king");
     }
 
-    if(isTargeted(Color::WHITE, whiteKingCoords)){
+    if (isTargeted(Color::WHITE, whiteKingCoords))
+    {
         throw std::runtime_error("White king is in check in setup, invalid");
     }
-    else if(isTargeted(Color::BLACK, blackKingCoords)){
+    else if (isTargeted(Color::BLACK, blackKingCoords))
+    {
         throw std::runtime_error("Black king is in check in setup, invalid");
     }
     return;
@@ -487,6 +498,11 @@ ChessState::~ChessState() {}
 const std::vector<std::vector<std::unique_ptr<Piece>>> &ChessState::getBoard() const
 {
     return board;
+}
+
+Color ChessState::getWinner()
+{
+    return winner;
 }
 
 void ChessState::defaultSetup()
