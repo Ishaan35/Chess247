@@ -51,7 +51,7 @@ vector<PossibleMove> &SingleSquareMovement::getPossibleMoves(const vector<vector
 					}
 				}
 				if (isWayClear)
-					res.push_back(PossibleMove{position, make_pair(position.first, position.second - 2)});
+					res.push_back(PossibleMove{position, make_pair(position.first, position.second - 2), true});
 			}
 		}
 		if (position.second + 2 < cols)
@@ -72,7 +72,7 @@ vector<PossibleMove> &SingleSquareMovement::getPossibleMoves(const vector<vector
 					}
 				}
 				if (isWayClear)
-					res.push_back(PossibleMove{position, make_pair(position.first, position.second - 2)});
+					res.push_back(PossibleMove{position, make_pair(position.first, position.second - 2), true});
 			}
 		}
 	}
