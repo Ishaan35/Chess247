@@ -3,16 +3,15 @@
 
 GraphicsDisplay::GraphicsDisplay(int n, int w, int h, int squarew) : numPlayers{n}, width{w}, height{h}, squareWidth{squarew}, darkSquareColor{RGBColor{184, 134, 97}}, lightSquareColor{
                                                                                                                                                                             RGBColor{238, 215, 174}}
-                                                                     
-{
 
+{
 }
 
 void GraphicsDisplay::setSubject(std::shared_ptr<Subject> s, std::shared_ptr<Observer> o)
 {
     if (!subject.lock())
     {
-        
+
         subject = std::dynamic_pointer_cast<ChessState>(s);
         if (auto subjectWkPtr = subject.lock())
         {
@@ -60,6 +59,21 @@ void GraphicsDisplay::notify()
     {
         const std::vector<std::vector<std::unique_ptr<Piece>>> &board = chessState->getBoard();
         renderToScreen(board);
+
+        if (chessState->isGameRunning())
+        {
+            if (chessState->getCheckmate())
+            {
+                std::string checkmateText = " by checkmate";
+                std::string winnerText = ((chessState->getWinner() == Color::BLACK) ? " Black wins" : " White wins");
+                window->drawText(winnerText + checkmateText, 50, height / 2, 50, 0, 0, 0);
+            }
+            else if (chessState->isDraw())
+            {
+                std::string text = "Game Over By Stalemate";
+                window->drawText(text, width / 2, height / 2, 20, 0, 0, 0);
+            }
+        }
     }
 }
 
