@@ -1,14 +1,19 @@
 #include "chessState.h"
 #include "./pieces/pieceFactory.h"
+using namespace std;
+
+void ChessState::setIsDefaultSetup(bool val){
+    isDefaultSetup = val;
+}  
 
 void ChessState::setWinner(Color winnerColor)
 {
     winner = winnerColor;
 }
 
-void ChessState::setGameRunning()
+void ChessState::setGameRunning(bool val)
 {
-    isGameRunning = true;
+    isGameRunning = val;
 }
 
 void ChessState::setResign(bool target)
@@ -53,12 +58,59 @@ bool ChessState::isCoordinateInBounds(std::pair<int, int> &coords)
     return true;
 }
 
-bool ChessState::isDraw() { return false; };
+bool ChessState::isTargeted(Color color, pair<int, int> position){
+    Color oppositeColor = (color == Color::BLACK) ? Color::WHITE : Color::BLACK;
+    int row = position.first;
+    int col = position.second;
+    for (int i=0; i<board.size(); i++){
+        for (int j=0; j<board[i].size(); j++){
+            if (board[i][j] && board[i][j]->getColor() == oppositeColor){
+                if(i == row && j == col) return true; // opponent's piece is right on top of the given position, our convention is that it's targetted
+                pair<int, int> opponent{i,j};
+                vector<PossibleMove> possibleMoves = board[i][j]->getPossibleMoves(opponent, board);
+                for (size_t k=0; k < possibleMoves.size(); k++){
+                    if(possibleMoves[k].to.first == row && possibleMoves[k].to.second == col && isValidMove(possibleMoves[k])){ // the opponent's piece can reach the given target
+                        return true;
+                    }
+                }
+            }
+        }
+    }
+    return false;
+}
 
-bool ChessState::isCheckmate() { return false; };
+bool ChessState::isDraw() {
+    // if(isTargeted(currentTurn, )){
+    //     return false;
+    // }
 
-bool ChessState::isValidMove(pair<int, int> toCoords, pair<int, int> fromCoords)
+    // check if King is in check aboves
+
+    int rows = board.size();
+    int cols = board[0].size();
+    for (size_t i=0; i < board.size(); i++){
+        for (size_t j=0; j < board[i].size(); j++){
+            if (board[i][j] && currentTurn == board[i][j]->getColor()){
+                pair<int, int> position{i,j};
+                vector<PossibleMove> possibleMoves = board[i][j]->getPossibleMoves(position, board);
+                for (size_t k=0; k < possibleMoves.size(); k++){
+                    if (isValidMove(possibleMoves[0])){
+                        return false;
+                    }
+                }
+            }
+        }
+    }
+    return true;
+}
+
+bool ChessState::isCheckmate() {
+
+};
+
+bool ChessState::isValidMove(PossibleMove possibleMove)
 {
+    // get from and to pairs from possible moves
     return false;
 };
 
@@ -71,9 +123,33 @@ void ChessState::playMove(InputMove &inputMove)
     {
         throw std::runtime_error("provided coordinates are not in bounds");
     }
+    
+    PossibleMove possibleMove{fromCoords, toCoords};
+    if (!isValidMove(possibleMove)){
+        throw std::runtime_error("invalid move!!");
+    }
+
+    std::unique_ptr<Piece> fromPiece = std::move(board[fromCoords.first][fromCoords.second]);
+
+    board[toCoords.first][toCoords.second].reset();
+
+    // rework below code to do promotions from terminal input, which will return an inputMove which has an isPromotion field
+    if(fromPiece->getType() == PieceType::Pawn && (toCoords.first == 0) || (toCoords.first == board.size() - 1)){
+        if (auto lockedPtr = inputSource.lock())
+        {
+            PieceType type = lockedPtr->getPromotion();
+            std::unique_ptr<Piece> newPiece = createPiece(type, inputMove.pieceColor);
+            board[toCoords.first][toCoords.second] = std::move(newPiece);
+        }
+    }
+
+    else{
+        board[toCoords.first][toCoords.second] = std::move(fromPiece);
+    }
+    board[fromCoords.first][fromCoords.second].reset();
 };
 
-ChessState::ChessState(const std::vector<std::weak_ptr<Player>> &players, int rows, int columns) : players{players}, board(rows) // r x c grid all nullptr by default
+ChessState::ChessState(const std::vector<std::weak_ptr<Player>> &players, weak_ptr<InputSource> input, int rows, int columns) : inputSource{input}, players{players}, board(rows) // r x c grid all nullptr by default
 {
     for (int i = 0; i < rows; i++)
     {
@@ -101,7 +177,7 @@ bool ChessState::placePieceAtPosition(PieceType t, char file, char rank, Color c
     return true;
 }
 
-ChessState::ChessState(const ChessState &other) : players{other.players}
+ChessState::ChessState(const ChessState &other) : players{other.players}, isGameRunning{other.isGameRunning}, resign{other.resign}, draw{other.draw}, checkmate{other.checkmate}, winner{other.winner}
 {
     // Deep copy of the board
     for (size_t i = 0; i < other.board.size(); i++)

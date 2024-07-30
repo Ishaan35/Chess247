@@ -12,13 +12,13 @@ ChessGame::ChessGame(weak_ptr<InputSource> input) : input{input}, players{}, num
 
 void ChessGame::runGame(weak_ptr<Player> whitePlayer, weak_ptr<Player> blackPlayer, std::vector<std::shared_ptr<Observer>> observers)
 {
-    chessState->setGameRunning();
+    chessState->setGameRunning(true);
 
     players = {whitePlayer, blackPlayer};
     numActive = players.size();
 
     if(!chessState){
-        chessState = std::make_shared<ChessState>(players, 8, 8);
+        chessState = std::make_shared<ChessState>(players, input, 8, 8);
         chessState->defaultSetup();
         for (auto &obs : observers)
         {
@@ -29,6 +29,7 @@ void ChessGame::runGame(weak_ptr<Player> whitePlayer, weak_ptr<Player> blackPlay
         for (size_t i=0; i < players.size(); i++){
             if(auto lockedPlayer = players[i].lock()){
                 InputMove currentMove = lockedPlayer->getMove();
+                currentMove.pieceColor = static_cast<Color>(i);
                 if(currentMove.isResign){
                     int winner = (i+1)%2;
                     Color winnerColor = static_cast<Color>(winner);
@@ -66,7 +67,7 @@ void ChessGame::setup(std::vector<std::shared_ptr<Observer>> observers)
         rows = dimensions.first;
         cols = dimensions.second;
     }
-    chessState = std::make_shared<ChessState>(players, rows, cols);
+    chessState = std::make_shared<ChessState>(players, input, rows, cols);
     for(auto &obs: observers){
         obs->setSubject(chessState, obs);
     }
@@ -74,8 +75,8 @@ void ChessGame::setup(std::vector<std::shared_ptr<Observer>> observers)
     while(true){
         if (auto inputLocked = input.lock()){
             SetupMove setupMove = inputLocked->getSetup();
-
-            if (setupMove.isDone) break;
+            PieceType type = setupMove.pieceType;
+            chessState->placePieceAtPosition(type, setupMove.file, setupMove.rank, setupMove.playerColor);
         }
         else{
             throw std::runtime_error("input source no longer exists"); 
