@@ -297,10 +297,8 @@ bool ChessState::isValidMove(PossibleMove move, char promotion)
         }
         return true;
     }
-    else if (toPiece->getColor() != fromPiece->getColor())
-    { // if capture (both pieces are of different colors)
-        if (toPiece->getType() == PieceType::King)
-        {
+    else if(toPiece && toPiece->getColor() != fromPiece->getColor()) { // if capture (both pieces are of different colors)
+        if(toPiece && toPiece->getType() == PieceType::King) {
             return false;
         }
         return true;
@@ -314,6 +312,21 @@ bool ChessState::isValidMove(PossibleMove move, char promotion)
 
     return false;
 };
+
+void ChessState::safelyMove(unique_ptr<Piece> &fromPiece, pair<int, int> fromCoords, pair<int, int> toCoords, Color pieceColor, char promotion){
+    fromPiece->setHasMoved(true);
+    board[toCoords.first][toCoords.second].reset();
+    if(promotion != ' '){
+        PieceType type = PieceTypeConverter::charToPieceType(promotion);
+        if (type != PieceType::King && type != PieceType::Pawn){
+            board[toCoords.first][toCoords.second] = createPiece(type, pieceColor);
+        }
+    }
+    else{
+        board[toCoords.first][toCoords.second] = fromPiece->clone();
+    }
+    board[fromCoords.first][fromCoords.second].reset();
+}
 
 void ChessState::playMove(InputMove &inputMove)
 {
@@ -331,29 +344,23 @@ void ChessState::playMove(InputMove &inputMove)
         throw std::runtime_error("invalid move!!");
     }
 
-    if (!board[fromCoords.first][fromCoords.second]->hasMoved())
-    {
-        board[fromCoords.first][fromCoords.second]->setHasMoved(true);
-    }
-
     std::unique_ptr<Piece> fromPiece = std::move(board[fromCoords.first][fromCoords.second]);
+    safelyMove(fromPiece, fromCoords, toCoords, currentTurn, inputMove.promotion);
 
-    board[toCoords.first][toCoords.second].reset();
-
-    if (inputMove.promotion != ' ')
-    {
-        PieceType type = PieceTypeConverter::charToPieceType(inputMove.promotion);
-        if (type != PieceType::King && type != PieceType::Pawn)
-        {
-            std::unique_ptr<Piece> newPiece = createPiece(type, inputMove.pieceColor);
-            board[toCoords.first][toCoords.second] = std::move(newPiece);
+    if(fromPiece->getType() == PieceType::King && (fromCoords.first - toCoords.first == 0) && abs(fromCoords.second - toCoords.second) == 2){
+        if(fromCoords.second - toCoords.second == 2){
+            std::unique_ptr<Piece> rook = std::move(board[toCoords.first][0]);
+            pair<int, int> rookFrom{toCoords.first, 0}; // move the rook at bottom left of board, toCoords is the destination of the king, which is also the back rank for white or black
+            pair<int, int> rookTo{toCoords.first, toCoords.second+1};
+            safelyMove(rook, rookFrom, rookTo, currentTurn, ' ');
+        }
+        else if(toCoords.second - fromCoords.second == 2){
+            std::unique_ptr<Piece> rook = std::move(board[toCoords.first][board.size()-1]);
+            pair<int, int> rookFrom{toCoords.first, board.size()-1};
+            pair<int, int> rookTo{toCoords.first, toCoords.second-1};
+            safelyMove(rook, rookFrom, rookTo, currentTurn, ' ');
         }
     }
-    else
-    {
-        board[toCoords.first][toCoords.second] = std::move(fromPiece);
-    }
-    board[fromCoords.first][fromCoords.second].reset();
 
     currentTurn = (currentTurn == Color::WHITE) ? Color::BLACK : Color::WHITE;
 
