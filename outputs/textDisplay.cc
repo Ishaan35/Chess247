@@ -26,8 +26,8 @@ void TextDisplay::renderToTerminal(const std::vector<std::vector<std::unique_ptr
         }
         std::cout << std::endl;
     }
-    std::cout << std::endl
-              << std::endl;
+    std::cout << std::endl;
+    std::cout << "  ";
     for (size_t i = 0; i < board[0].size(); i++)
         std::cout << (char)('a' + i);
     std::cout << std::endl;
