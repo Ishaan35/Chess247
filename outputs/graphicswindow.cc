@@ -32,11 +32,6 @@ GraphicsWindow::~GraphicsWindow()
 void GraphicsWindow::renderPNG(const std::string &filename, int target_width, int target_height, int x, int y)
 {
     cairo_t *cr = cairo_create(surface);
-
-    // Clear the surface with a background color (e.g., white)
-    cairo_set_source_rgb(cr, 1.0, 1.0, 1.0); // White color
-    cairo_paint(cr);
-
     // Render PNG file
     cairo_surface_t *image = cairo_image_surface_create_from_png(filename.c_str());
     if (cairo_surface_status(image) != CAIRO_STATUS_SUCCESS)

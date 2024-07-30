@@ -12,13 +12,13 @@ ChessGame::ChessGame(weak_ptr<InputSource> input) : input{input}, players{}, num
 
 void ChessGame::runGame(weak_ptr<Player> whitePlayer, weak_ptr<Player> blackPlayer, std::vector<std::shared_ptr<Observer>> observers)
 {
-    chessState->setGameRunning();
-
+    
     players = {whitePlayer, blackPlayer};
     numActive = players.size();
-
+    //if we did not initialize the chess state in setup, do it here
     if(!chessState){
         chessState = std::make_shared<ChessState>(players, 8, 8);
+        chessState->setGameRunning();
         chessState->defaultSetup();
         for (auto &obs : observers)
         {

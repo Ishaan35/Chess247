@@ -16,6 +16,7 @@ void GraphicsDisplay::setSubject(std::shared_ptr<Subject> s, std::shared_ptr<Obs
         subject = std::dynamic_pointer_cast<ChessState>(s);
         if (auto subjectWkPtr = subject.lock())
         {
+            std::cout << "attaching observer" << std::endl;
             subjectWkPtr->attach(o);
         }
         window = std::make_unique<GraphicsWindow>(width, height);
@@ -26,7 +27,6 @@ void GraphicsDisplay::renderToScreen(const std::vector<std::vector<std::unique_p
 {
     for (size_t i = 0; i < board.size(); i++)
     {
-        std::cout << board.size() - i << " ";
         for (size_t j = 0; j < board[i].size(); j++)
         {
             int y = i * squareWidth;

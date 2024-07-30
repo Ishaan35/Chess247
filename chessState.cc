@@ -1,5 +1,6 @@
 #include "chessState.h"
 #include "./pieces/pieceFactory.h"
+#include <iostream>
 
 void ChessState::setWinner(Color winnerColor)
 {
@@ -83,13 +84,14 @@ ChessState::ChessState(const std::vector<std::weak_ptr<Player>> &players, int ro
 
 std::pair<int, int> ChessState::rankFileToCoordinates(char file, char rank)
 {
-    int i = board.size() - (int)(file - '0');
+    int i = board.size() - (int)(rank - '0');
     int j = (int)(file - 'a');
     return std::pair<int, int>{i, j};
 }
 
 bool ChessState::placePieceAtPosition(PieceType t, char file, char rank, Color color)
 {
+    
     std::pair<int, int> coords = rankFileToCoordinates(file, rank);
     if (!isCoordinateInBounds(coords))
     {
@@ -97,7 +99,6 @@ bool ChessState::placePieceAtPosition(PieceType t, char file, char rank, Color c
     }
     // add piece to state here
     board[coords.first][coords.second] = createPiece(t, color);
-
     return true;
 }
 

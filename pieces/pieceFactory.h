@@ -10,6 +10,7 @@
 #include "pieceType.h"
 #include <memory>
 #include "../colorEnum.h"
+#include <iostream>
 
 inline std::unique_ptr<Piece> createPiece(PieceType type, Color color)
 {
@@ -28,6 +29,7 @@ inline std::unique_ptr<Piece> createPiece(PieceType type, Color color)
     case PieceType::King:
         return std::make_unique<King>(type, color);
     default:
+        std::cout <<"default nullptr piece" << std::endl;
         return nullptr;
     }
 }
