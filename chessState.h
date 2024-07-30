@@ -20,6 +20,7 @@ class ChessState : public Subject
     Color winner;
     Color currentTurn;
     std::pair<int, int> rankFileToCoordinates(char file, char rank);
+    void safelyMove(unique_ptr<Piece> &fromPiece, pair<int, int> fromCoords, pair<int, int> toCoords, Color pieceColor, char promotion = ' ');
 
 public:
     ChessState(const std::vector<std::weak_ptr<Player>> &players, int rows, int columns);
