@@ -18,6 +18,7 @@ class Engine
     InputMove maximize(ChessState chessStateCopy, int depth);
     InputMove minimize(ChessState chessStateCopy, int depth);
     int minimax(ChessState chessStateCopy, int depth, Color player);
+    InputMove convertPossibleMoveToInputMove(PossibleMove pm, Color c);
 
 public:
     InputMove getBestMove(Color playerColor, int depth);

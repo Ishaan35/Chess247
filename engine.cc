@@ -1,6 +1,7 @@
 #include "engine.h"
 #include <stdexcept>
 #include <random>
+#include <limits>
 
 ChessState Engine::createChessStateCopy()
 {
@@ -21,7 +22,7 @@ pair<char, char> Engine::convertToChars(pair<int, int> position)
     // convert to a-h (cols), 8-1 (rows)
     if (auto lockedState = chessState.lock())
     {
-        return make_pair(position.second + 'a', lockedState->getBoard().size() - position.first);
+        return make_pair((char)(position.second + 'a'), (char)(lockedState->getBoard().size() - position.first));
     }
     else
     {
@@ -76,13 +77,55 @@ InputMove Engine::getLevel2Move(Color playerColor) {}
 InputMove Engine::getLevel3Move(Color playerColor) {}
 InputMove Engine::getLevel4Move(Color playerColor) {}
 
-int Engine::minimax(ChessState chessStateCopy, int depth, Color player)
+InputMove Engine::convertPossibleMoveToInputMove(PossibleMove pm, Color c)
 {
-    if (depth == 0 || chessStateCopy.isDraw())
+
+    return InputMove{convertToChars(pm.from), convertToChars(pm.to), false, pm.promotion, c};
+}
+
+int Engine::minimax(ChessState state, int depth, Color player)
+{
+    if (depth == 0 || state.getCheckmate() || state.isDraw() || state.getResign())
     {
-        return chessStateCopy.getChessBoardEvaluation();
+        return state.getChessBoardEvaluation();
+    }
+
+    if (player == Color::WHITE)
+    {
+        int maxEval = std::numeric_limits<int>::min();
+
+        std::vector<PossibleMove> possibleMoves = state.getAllPossibleMoves(player);
+        for (PossibleMove move : possibleMoves)
+        {
+            ChessState copyState = state;
+            InputMove convertedMove = convertPossibleMoveToInputMove(move, player);
+            copyState.playMove(convertedMove);
+            int eval = minimax(copyState, depth - 1, Color::BLACK);
+            maxEval = std::max(maxEval, eval);
+        }
+        return maxEval;
+    }
+    else
+    {
+        int minEval = std::numeric_limits<int>::max();
+        std::vector<PossibleMove> possibleMoves = state.getAllPossibleMoves(player);
+        for (PossibleMove move : possibleMoves)
+        {
+            ChessState copyState = state;
+            InputMove convertedMove = convertPossibleMoveToInputMove(move, player);
+            copyState.playMove(convertedMove);
+            int eval = minimax(copyState, depth - 1, Color::WHITE);
+            minEval = std::min(minEval, eval);
+        }
+        return minEval;
     }
 }
+
+// get best move for white
+// get all moves for white
+// play each one on a state
+// ge tthe evaluation using minimax
+// choose the move that resulted in the max eval
 
 InputMove Engine::getBestMove(Color playerColor, int depth)
 {
