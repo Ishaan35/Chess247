@@ -1,7 +1,6 @@
 #include "piece.h"
 
-void Piece::setHasMoved(bool val)
-{
+void Piece::setHasMoved(bool val){
     has_moved = val;
 }
 

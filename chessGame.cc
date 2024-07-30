@@ -77,6 +77,9 @@ void ChessGame::setup(std::vector<std::shared_ptr<Observer>> observers)
             PieceType type = setupMove.pieceType;
             chessState->placePieceAtPosition(type, setupMove.file, setupMove.rank, setupMove.playerColor);
             chessState->notifyObservers();
+
+            if (setupMove.isDone){
+            }
         }
         else{
             throw std::runtime_error("input source no longer exists"); 
