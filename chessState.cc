@@ -10,9 +10,9 @@ void ChessState::verifySetup()
     pair<int, int> whiteKingCoords{-1, -1};
     pair<int, int> blackKingCoords{-1, -1};
 
-    for (int i = 0; i < board.size(); i++)
+    for (int i = 0; i < static_cast<int>(board.size()); i++)
     {
-        for (int j = 0; j < board[i].size(); j++)
+        for (int j = 0; j < static_cast<int>(board[i].size()); j++)
         {
             if (board[i][j])
             {
@@ -26,7 +26,7 @@ void ChessState::verifySetup()
                     blackKingCount++;
                     blackKingCoords = {i, j};
                 }
-                else if (board[i][j]->getType() == PieceType::Pawn && (i == 0 || i == board.size() - 1))
+                else if (board[i][j]->getType() == PieceType::Pawn && (i == 0 || i == static_cast<int>(board.size()) - 1))
                 {
                     throw std::runtime_error("pawn is on the back rank");
                 }

@@ -14,7 +14,7 @@ vector<PossibleMove> &DiagonalMovement::getPossibleMoves(const vector<vector<uni
 	int y = position.second;
 
 	// keep going along one of the four diagonals until you reach a piece
-	for (int i = 1; y + i < board[0].size() && x + i < board.size(); i++)
+	for (int i = 1; y + i < static_cast<int>(board[0].size()) && x + i < static_cast<int>(board.size()); i++)
 	{
 		if (board[x + i][y + i])
 		{
@@ -29,7 +29,7 @@ vector<PossibleMove> &DiagonalMovement::getPossibleMoves(const vector<vector<uni
 			res.push_back(PossibleMove{position, make_pair(x + i, y + i)});
 		}
 	}
-	for (int i = 1; 0 <= y - i && x + i < board.size(); i++)
+	for (int i = 1; 0 <= y - i && x + i < static_cast<int>(board.size()); i++)
 	{
 		if (board[x + i][y - i])
 		{
@@ -44,7 +44,7 @@ vector<PossibleMove> &DiagonalMovement::getPossibleMoves(const vector<vector<uni
 			res.push_back(PossibleMove{position, make_pair(x + i, y - i)});
 		}
 	}
-	for (int i = 1; y + i < board[0].size() && 0 <= x - i; i++)
+	for (int i = 1; y + i < static_cast<int>(board[0].size()) && 0 <= x - i; i++)
 	{
 		if (board[x - i][y + i])
 		{

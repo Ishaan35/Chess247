@@ -9,7 +9,7 @@ vector<PossibleMove> &HorizontalMovement::getPossibleMoves(const vector<vector<u
 
 	// inside same row
 	vector<PossibleMove> &res = next->getPossibleMoves(board, allMoves, position);
-	for (int j = position.second + 1; j < board[0].size(); j++)
+	for (int j = position.second + 1; j < static_cast<int>(board[0].size()); j++)
 	{
 		if (board[position.first][j])
 		{
