@@ -51,6 +51,7 @@ public:
     bool isTargeted(Color color, pair<int, int> position);
     void verifySetup();
     int getChessBoardEvaluation();
+    std::vector<PossibleMove> getAllPossibleMoves(Color player);
     ~ChessState();
 };
 

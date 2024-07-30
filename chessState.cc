@@ -548,6 +548,33 @@ int ChessState::getChessBoardEvaluation()
     return sum;
 }
 
+std::vector<PossibleMove> ChessState::getAllPossibleMoves(Color player)
+{
+    std::vector<PossibleMove> allMoves;
+
+    for (int i = 0; i < board.size(); i++)
+    {
+        for (int j = 0; j < board[0].size(); j++)
+        {
+            if (board[i][j] && board[i][j]->getColor() == player)
+            {
+                vector<PossibleMove> currMoves = board[i][j]->getPossibleMoves(make_pair(i, j), board);
+
+                vector<PossibleMove> validMoves;
+                for (PossibleMove p : currMoves)
+                {
+                    if (isValidMove(p))
+                    {
+                        validMoves.push_back(p);
+                    }
+                }
+                allMoves.insert(allMoves.end(), validMoves.begin(), validMoves.end());
+            }
+        }
+    }
+    return allMoves;
+}
+
 void ChessState::defaultSetup()
 {
     for (size_t i = 0; i < board.size(); i++)
