@@ -15,6 +15,17 @@ ChessState Engine::createChessStateCopy()
     }
 }
 
+pair<char, char> Engine::convertToChars(pair<int, int> position) {
+    // we're getting rowIndex, colIndex
+    // convert to a-h (cols), 8-1 (rows)
+    if(auto lockedState = chessState.lock()) {
+        return make_pair(position.second + 'a', lockedState->getBoard().size() - position.first);
+    }
+    else {
+        throw std::runtime_error("no state exists");
+    }
+}
+
 InputMove Engine::getLevel1Move(Color playerColor) {
 
     // get all possible moves for this player color
@@ -41,13 +52,14 @@ InputMove Engine::getLevel1Move(Color playerColor) {
         // figure out if the move is a promotion and select random between "Q", "R", "K", "B";
         const unique_ptr<Piece>& fromPiece = board[allMoves[randIndex].from.first][allMoves[randIndex].from.second];
         int nextRow = allMoves[randIndex].to.first;
+        char randPromo = ' ';
         if(fromPiece->getType() == PieceType::Pawn && nextRow == 0 || nextRow == board.size() - 1) {
-            int randPromo = distr(gen) % 4;
+            int randPromoInd = distr(gen) % 4;
             vector<char> promos = {'Q', 'R', 'N', 'R'};
-            return InputMove{allMoves[randIndex].from, allMoves[randIndex].to, false, promos[randPromo], fromPiece->getColor()};
+            randPromo = promos[randPromoInd];
         }
 
-        return InputMove{allMoves[randIndex].from, allMoves[randIndex].to, false, ' ', fromPiece->getColor()};
+        return InputMove{convertToChars(allMoves[randIndex].from), convertToChars(allMoves[randIndex].to), false, randPromo, fromPiece->getColor()};
     }
 }
 

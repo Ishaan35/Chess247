@@ -9,6 +9,7 @@ class Engine
 {
     std::weak_ptr<const ChessState> chessState; // chess state should be a shared ptr in chessGame. it owns it, but permits engine to access state without owning it
     ChessState createChessStateCopy();
+    pair<char, char> convertToChars(pair<int, int> position);
     
     InputMove getLevel1Move(Color playerColor);
     InputMove getLevel2Move(Color playerColor);
