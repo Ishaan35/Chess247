@@ -40,54 +40,52 @@ void ChessGame::runGame(weak_ptr<Player> whitePlayer, weak_ptr<Player> blackPlay
     engine->setChessState(chessState);
 
     while (true)
-    {
-        for (size_t i = 0; i < players.size(); i++)
+    {   
+        Color currentTurn = chessState->getPlayerTurn();
+        if (auto lockedPlayer = players[currentTurn].lock())
         {
-            if (auto lockedPlayer = players[i].lock())
+            while (true)
             {
-                while (true)
+                try
                 {
-                    try
+                    InputMove currentMove = lockedPlayer->getMove();
+                    currentMove.pieceColor = currentTurn;
+                    if (currentMove.isResign)
                     {
-                        InputMove currentMove = lockedPlayer->getMove();
-                        currentMove.pieceColor = static_cast<Color>(i);
-                        if (currentMove.isResign)
+                        int winner = (currentTurn + 1) % 2;
+                        Color winnerColor = static_cast<Color>(winner);
+                        chessState->setResign(true);
+                        chessState->setWinner(winnerColor);
+                        return;
+                    }
+                    else
+                    {
+                        chessState->playMove(currentMove);
+                        if (chessState->isCheckmate())
                         {
-                            int winner = (i + 1) % 2;
-                            Color winnerColor = static_cast<Color>(winner);
-                            chessState->setResign(true);
+                            Color winnerColor = currentTurn == Color::WHITE ? Color::BLACK : Color::WHITE;
+                            chessState->setCheckmate(true);
                             chessState->setWinner(winnerColor);
+                            std::cout << "you checkmated them W " << std::endl;
                             return;
                         }
-                        else
+                        if (chessState->isDraw())
                         {
-                            chessState->playMove(currentMove);
-                            if (chessState->isCheckmate())
-                            {
-                                Color winnerColor = static_cast<Color>(i);
-                                chessState->setCheckmate(true);
-                                chessState->setWinner(winnerColor);
-                                std::cout << "you checkmated them W " << std::endl;
-                                return;
-                            }
-                            if (chessState->isDraw())
-                            {
-                                chessState->setDraw(true);
-                                std::cout << "it's a stalemate lol" << std::endl;
-                                return;
-                            }
+                            chessState->setDraw(true);
+                            std::cout << "it's a stalemate lol" << std::endl;
+                            return;
                         }
                     }
-                    catch (std::runtime_error e)
-                    {
-                        cout << e.what() << endl;
-                    }
+                }
+                catch (std::runtime_error e)
+                {
+                    cout << e.what() << endl;
                 }
             }
-            else
-            {
-                continue;
-            }
+        }
+        else
+        {
+            continue;
         }
     }
 }

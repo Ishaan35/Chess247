@@ -381,6 +381,10 @@ void ChessState::safelyMove(unique_ptr<Piece> &fromPiece, pair<int, int> fromCoo
     board[fromCoords.first][fromCoords.second].reset();
 }
 
+Color ChessState::getPlayerTurn() {
+    return currentTurn;
+}
+
 void ChessState::playMove(InputMove &inputMove)
 {
     std::pair<int, int> fromCoords = rankFileToCoordinates(inputMove.from.first, inputMove.from.second);

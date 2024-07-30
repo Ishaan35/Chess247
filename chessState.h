@@ -40,6 +40,7 @@ public:
     void setDraw(bool target);
     void setCheckmate(bool target);
     void setWinner(Color color);
+    Color getPlayerTurn();
     bool getResign();
     bool getDraw();
     bool getCheckmate();
