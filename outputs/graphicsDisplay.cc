@@ -2,29 +2,26 @@
 #include "../pieces/pieceType.h"
 
 GraphicsDisplay::GraphicsDisplay(int n, int w, int h, int squarew) : numPlayers{n}, width{w}, height{h}, squareWidth{squarew}, darkSquareColor{RGBColor{184, 134, 97}}, lightSquareColor{
-                                                                                                                                                                            RGBColor{238, 215, 174}},
-                                                                     window{std::make_unique<GraphicsWindow>(w, h)}
+                                                                                                                                                                            RGBColor{238, 215, 174}}
+                                                                     
 {
-    // Assuming chesspiece.png is in the current directory
-    // win1.renderPNG("assets/chesspiece.png", 50, 50);
 
-    // // Draw rectangles and text
-    // win1.drawRectangle(100, 100, 50, 50, 186, 104, 37);
-    // win1.drawRectangle(200, 100, 50, 50, 186, 104, 37);
-    // win1.drawRectangle(300, 100, 50, 50, 186, 104, 37);
-    // win1.drawRectangle(50, 150, 50, 50, 186, 104, 37);
-    // win1.drawRectangle(150, 150, 50, 50, 186, 104, 37);
-    // win1.drawRectangle(250, 150, 50, 50, 186, 104, 37);
-    // win1.drawRectangle(350, 150, 50, 50, 186, 104, 37);
-    // win1.drawText("Guess the elo", 50, 50, 20.0, 0, 0, 0);
-
-    // // Handle events (including mouse clicks)
-    // win1.handleEvents();
-
-    // // Control reaches here after handling events
-    // std::cout << "Exiting..." << std::endl;
 }
 
+void GraphicsDisplay::setSubject(std::shared_ptr<Subject> s, std::shared_ptr<Observer> o)
+{
+    if (!subject.lock())
+    {
+        
+        subject = std::dynamic_pointer_cast<ChessState>(s);
+        if (auto subjectWkPtr = subject.lock())
+        {
+            subjectWkPtr->attach(o);
+        }
+        window = std::make_unique<GraphicsWindow>(width, height);
+        notify();
+    }
+}
 void GraphicsDisplay::renderToScreen(const std::vector<std::vector<std::unique_ptr<Piece>>> &board)
 {
     for (size_t i = 0; i < board.size(); i++)

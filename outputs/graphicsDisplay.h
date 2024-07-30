@@ -31,6 +31,7 @@ class GraphicsDisplay : public Observer
 
 public:
     GraphicsDisplay(int numPlayers, int w, int h, int squarew);
+    void setSubject(std::shared_ptr<Subject> subject, std::shared_ptr<Observer> o) override;
     void renderToScreen(const std::vector<std::vector<std::unique_ptr<Piece>>> &board);
     void notify() override;
     ~GraphicsDisplay();

@@ -10,11 +10,21 @@ ChessGame::ChessGame(weak_ptr<InputSource> input) : input{input}, players{}, num
 
 // need to play move and place piece during setup right now
 
-void ChessGame::runGame(weak_ptr<Player> whitePlayer, weak_ptr<Player> blackPlayer){
+void ChessGame::runGame(weak_ptr<Player> whitePlayer, weak_ptr<Player> blackPlayer, std::vector<std::shared_ptr<Observer>> observers)
+{
     chessState->setGameRunning();
 
     players = {whitePlayer, blackPlayer};
     numActive = players.size();
+
+    if(!chessState){
+        chessState = std::make_shared<ChessState>(players, 8, 8);
+        chessState->defaultSetup();
+        for (auto &obs : observers)
+        {
+            obs->setSubject(chessState, obs);
+        }
+    }
     while (true){
         for (size_t i=0; i < players.size(); i++){
             if(auto lockedPlayer = players[i].lock()){
@@ -44,10 +54,11 @@ void ChessGame::runGame(weak_ptr<Player> whitePlayer, weak_ptr<Player> blackPlay
                 continue;
             }
         }
-    }   
+    }
 }
 // setup get the dimensions
-void ChessGame::setup(){
+void ChessGame::setup(std::vector<std::shared_ptr<Observer>> observers)
+{
     int rows = 0;
     int cols = 0;
     if (auto inputLocked = input.lock()) {
@@ -56,6 +67,9 @@ void ChessGame::setup(){
         cols = dimensions.second;
     }
     chessState = std::make_shared<ChessState>(players, rows, cols);
+    for(auto &obs: observers){
+        obs->setSubject(chessState, obs);
+    }
     
     while(true){
         if (auto inputLocked = input.lock()){

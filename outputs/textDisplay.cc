@@ -32,6 +32,17 @@ void TextDisplay::renderToTerminal(const std::vector<std::vector<std::unique_ptr
         std::cout << (char)('a' + i) << std::endl;
 }
 
+void TextDisplay::setSubject(std::shared_ptr<Subject> s, std::shared_ptr<Observer> o)
+{
+    if(!subject.lock()){
+        subject = std::dynamic_pointer_cast<ChessState>(s);
+        if (auto subjectWkPtr = subject.lock())
+        {
+            subjectWkPtr->attach(o);
+        }
+    }
+}
+
 void TextDisplay::notify()
 {
     if (auto chessState = subject.lock())

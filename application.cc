@@ -5,6 +5,9 @@
 #include "chessGame.h"
 #include "./players/humanPlayer.h"
 #include "./players/computerPlayer.h"
+#include "./outputs/graphicsDisplay.h"
+#include "./outputs/textDisplay.h"
+
 using namespace std;
 
 Application::Application() : in{make_shared<TerminalInput>()} {
@@ -12,8 +15,14 @@ Application::Application() : in{make_shared<TerminalInput>()} {
 
 void Application::run()
 {
+
 	string command;
 	ChessGame game{in};
+
+	std::shared_ptr<Observer> graphicsDisplay = std::make_shared<GraphicsDisplay>(2, 800, 800, 100);
+	std::shared_ptr<Observer> textDisplay = std::make_shared<TextDisplay>(2);
+
+	std::vector<std::shared_ptr<Observer>> observers = {graphicsDisplay, textDisplay};
 
 	cout << "WELCOME TO RIZZ CHESS!!!" << endl;
 
@@ -22,7 +31,7 @@ void Application::run()
 		if (command == "setup")
 		{
 			cout << "Enter in number of players" << endl;
-			game.setup();
+			game.setup(observers);
 		}
 		else if (command == "game")
 		{
@@ -34,7 +43,7 @@ void Application::run()
 
 				gamePlayers.push_back(players[playerName]);
 			}
-			game.runGame(gamePlayers[0], gamePlayers[1]);
+			game.runGame(gamePlayers[0], gamePlayers[1], observers);
 		}
 		else if (command == "addp")
 		{

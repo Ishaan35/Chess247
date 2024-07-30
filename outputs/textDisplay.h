@@ -16,6 +16,7 @@ class TextDisplay : public Observer
 public:
     TextDisplay(int numPlayers);
     void renderToTerminal(const std::vector<std::vector<std::unique_ptr<Piece>>> &board);
+    void setSubject(std::shared_ptr<Subject> subject, std::shared_ptr<Observer> o) override;
     void notify() override;
     ~TextDisplay();
 };

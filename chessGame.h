@@ -22,10 +22,10 @@ class ChessGame{
 public:
     ChessGame(weak_ptr<InputSource> input);
 
-    void runGame(weak_ptr<Player> whitePlayer, weak_ptr<Player> blackPlayer); // calls play move in loop, prompts each player for a move, and if there is no remaining pieces, then game is done. nested loop
-    // checks if move is resign, sets player pointer to null 
+    void runGame(weak_ptr<Player> whitePlayer, weak_ptr<Player> blackPlayer, std::vector<std::shared_ptr<Observer>> observers); // calls play move in loop, prompts each player for a move, and if there is no remaining pieces, then game is done. nested loop
+    // checks if move is resign, sets player pointer to null
 
-    weak_ptr<Player> getWinner(vector<weak_ptr<Player>> remainingPlayers); 
+    weak_ptr<Player> getWinner(vector<weak_ptr<Player>> remainingPlayers);
 
-    void setup();
+    void setup(std::vector<std::shared_ptr<Observer>> observers);
 };
