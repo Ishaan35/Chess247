@@ -9,9 +9,12 @@ std::string Player::getName()
 }
 
 
-void Player::incrementWon() {gamesWon++;}
+void Player::incrementWon(bool draw) {
+    if(!draw) gamesWon++;
+    else gamesWon += 0.5;
+}
 
-int Player::getGamesWon() {
+double Player::getGamesWon() {
     return gamesWon;
 }
 
