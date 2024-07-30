@@ -26,6 +26,7 @@ public:
     ChessState(const ChessState &other);
     const std::vector<std::vector<std::unique_ptr<Piece>>> &getBoard();
     void defaultSetup();
+    bool removePiece(char file, char rank);
     bool placePieceAtPosition(PieceType t, char file, char rank, Color color);
     bool isValidMove(PossibleMove possibleMove);
     void playMove(InputMove &inputMove);
@@ -42,6 +43,7 @@ public:
     bool getDraw();
     bool getCheckmate();
     void setIsDefaultSetup(bool val);
+    void setCurrentTurn(Color turn);
     Color getWinner();
     bool isTargeted(Color color, pair<int, int> position);
     ~ChessState();

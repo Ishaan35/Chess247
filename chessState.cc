@@ -3,6 +3,22 @@
 
 using namespace std;
 
+bool ChessState::removePiece(char file, char rank){
+    std::pair<int, int> coords = rankFileToCoordinates(file, rank);
+    if (!isCoordinateInBounds(coords))
+    {
+        return false;
+    }
+    // reset/delete piece
+    board[coords.first][coords.second].reset();
+    notifyObservers();
+    return true;
+}
+
+void ChessState::setCurrentTurn(Color turn){
+    currentTurn = turn;
+}
+
 void ChessState::setIsDefaultSetup(bool val){
     isDefaultSetup = val;
 }  
@@ -234,6 +250,8 @@ void ChessState::playMove(InputMove &inputMove)
         board[toCoords.first][toCoords.second] = std::move(fromPiece);
     }
     board[fromCoords.first][fromCoords.second].reset();
+
+    notifyObservers();
 };
 
 ChessState::ChessState(const std::vector<std::weak_ptr<Player>> &players, int rows, int columns) : players{players}, board(rows) // r x c grid all nullptr by default
@@ -261,6 +279,7 @@ bool ChessState::placePieceAtPosition(PieceType t, char file, char rank, Color c
     }
     // add piece to state here
     board[coords.first][coords.second] = createPiece(t, color);
+    notifyObservers();
     return true;
 }
 

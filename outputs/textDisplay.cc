@@ -21,23 +21,21 @@ void TextDisplay::renderToTerminal(const std::vector<std::vector<std::unique_ptr
             }
             else
             {
-                std::cout << ' ';
+                std::cout << ' ' << std::endl;
             }
         }
         std::cout << std::endl;
     }
-    std::cout << std::endl;
-    std::cout << ' ' << ' ';
+    std::cout << std::endl
+              << std::endl;
     for (size_t i = 0; i < board[0].size(); i++)
-        std::cout << (char)('a' + i);
-    std::cout << std::endl;
+        std::cout << (char)('a' + i) << std::endl;
 }
 
 void TextDisplay::setSubject(std::shared_ptr<Subject> s, std::shared_ptr<Observer> o)
 {
-    // if we did not initialize subject yet (i.e if it was not done in the setup), attach it now.
-    if (!subject.lock())
-    {
+    // if we did not initialize subject yet (i.e if it was not done in the setup), attach it now. 
+    if(!subject.lock()){
         subject = std::dynamic_pointer_cast<ChessState>(s);
         if (auto subjectWkPtr = subject.lock())
         {

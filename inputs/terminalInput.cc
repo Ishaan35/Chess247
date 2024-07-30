@@ -2,8 +2,19 @@
 #include <string>
 #include <iostream>
 #include <cctype>
+#include <sstream>
+#include <vector>
 
 using namespace std;
+
+string TerminalInput::trim(const string& str) {
+    size_t first = str.find_first_not_of(" \t\n\r\f\v");
+    if (first == std::string::npos) {
+        return ""; // no content
+    }
+    size_t last = str.find_last_not_of(" \t\n\r\f\v");
+    return str.substr(first, last - first + 1);
+}
 
 PieceType TerminalInput::getPromotion(){
     cout << "Enter character representing the piece you want to promote to!";
@@ -90,47 +101,60 @@ SetupMove TerminalInput::getSetup()
     return move;
 }
 
-InputMove TerminalInput::getInput()
-{
+InputMove TerminalInput::getInput() {
     InputMove move{};
+    std::string token;
 
-    string token;
-    cin >> token;
-    if (token == "resign")
-    {
-        move.isResign = true;
-        return move;
-    }
+    while (true) { // Loop until a valid move is entered
+        std::cout << "Enter your move: ";
+        getline(std::cin, token);
+        std::string trimmedToken = trim(token);
 
-    if (token != "move")
-    {
-        throw std::runtime_error("incorrect move command format");
-    }
-    cin >> token;
-    bool res = processPosition(token, move.from.first, move.from.second);
-    if (!res)
-    {
-        throw std::runtime_error("incorrect from location format");
-    }
-
-    cin >> token;
-    res = processPosition(token, move.to.first, move.to.second);
-    if (!res)
-    {
-        throw std::runtime_error("incorrect to location format");
-    }
-
-    cin >> token;
-    if (token.length() == 1 && PieceTypeConverter::isValidChar(token[0])){
-        move.promotion = token[0];
-    }
-    else{
-        for (size_t i=token.length()-1; i>=0; i--){
-            cin.putback(token[i]);
+        if (trimmedToken == "resign") {
+            move.isResign = true;
+            return move;
         }
-    }
 
-    return move;
+        std::vector<std::string> result;
+        std::istringstream iss(trimmedToken);
+        std::string part;
+        while (iss >> part) {
+            result.push_back(part);
+        }
+
+        if (result.size() != 3 && result.size() != 4) {
+            std::cout << "Incorrect move command format. Please try again.\n";
+            continue; 
+        }
+
+        if (result[0] != "move") {
+            std::cout << "Incorrect move command format. Please try again.\n";
+            continue; 
+        }
+
+        bool res = processPosition(result[1], move.from.first, move.from.second);
+        if (!res) {
+            std::cout << "Incorrect from location format. Please try again.\n";
+            continue;
+        }
+
+        res = processPosition(result[2], move.to.first, move.to.second);
+        if (!res) {
+            std::cout << "Incorrect to location format. Please try again.\n";
+            continue;
+        }
+
+        if (result.size() == 4) {
+            if (result[3].length() == 1 && PieceTypeConverter::isValidChar(result[3][0])) {
+                move.promotion = result[3][0];
+            } else {
+                std::cout << "Invalid promotion piece. Please try again.\n";
+                continue;
+            }
+        }
+
+        return move; // If all checks pass, return the valid move
+    }
 }
 
 pair<int, int> TerminalInput::getDimensions()

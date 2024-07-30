@@ -9,6 +9,8 @@ class TerminalInput : public InputSource
 {
 	InputMove getInput() override;
 
+	string trim(const string& str);
+
 	SetupMove getSetup() override;
 
 	PieceType getPromotion() override;
