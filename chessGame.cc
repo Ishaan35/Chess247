@@ -75,6 +75,7 @@ void ChessGame::runGame(weak_ptr<Player> whitePlayer, weak_ptr<Player> blackPlay
                             return;
                         }
                     }
+                    break;
                 }
                 catch (std::runtime_error e)
                 {

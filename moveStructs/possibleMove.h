@@ -8,9 +8,10 @@ struct PossibleMove
     pair<int, int> from;
     pair<int, int> to;
     bool isCastling;
+    char promotion;
 
-    PossibleMove(pair<int, int> from, pair<int, int> to, bool isCastling = false):
-        from{from}, to{to}, isCastling{isCastling} {}
+    PossibleMove(pair<int, int> from, pair<int, int> to, bool isCastling = false, char promotion = ' '):
+        from{from}, to{to}, isCastling{isCastling}, promotion{promotion} {}
 
     bool operator==(const PossibleMove& other) const {
         return from == other.from && to == other.to;

@@ -20,7 +20,15 @@ vector<PossibleMove> &PawnMovement::getPossibleMoves(const vector<vector<unique_
 	{
 		if (!board[newX1][y])
 		{
-			res.push_back(PossibleMove{position, make_pair(newX1, y)});
+			if(newX1 == 0 || newX1 == board.size() -1) {
+				vector<char> promos = {'Q', 'N', 'R', 'B'};
+				for(int i = 0; i < promos.size(); i++) {
+					res.push_back(PossibleMove{position, make_pair(newX1, y), false, promos[i]});
+				}
+			}
+			else {
+				res.push_back(PossibleMove{position, make_pair(newX1, y)});
+			}
 		}
 		if (0 <= y - 1 && board[newX1][y - 1])
 		{
