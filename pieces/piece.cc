@@ -1,12 +1,8 @@
 #include "piece.h"
 
-void Piece::setHasMoved(bool val){
-    has_moved = val;
-}
-
-std::unique_ptr<Piece> createPiece(PieceType t, Color color)
+void Piece::setHasMoved(bool val)
 {
-    return std::unique_ptr<Piece>();
+    has_moved = val;
 }
 
 Color Piece::getColor()
