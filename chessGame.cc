@@ -14,9 +14,10 @@ void ChessGame::runGame(weak_ptr<Player> whitePlayer, weak_ptr<Player> blackPlay
 {
     players = {whitePlayer, blackPlayer};
     numActive = players.size();
-    //if we did not initialize the chess state in setup, do it here
-    if(!chessState){
-        chessState = std::make_shared<ChessState>(players,8, 8);
+    // if we did not initialize the chess state in setup, do it here
+    if (!chessState)
+    {
+        chessState = std::make_shared<ChessState>(players, 8, 8);
         chessState->setGameRunning(true);
         chessState->defaultSetup();
         for (auto &obs : observers)
@@ -24,40 +25,53 @@ void ChessGame::runGame(weak_ptr<Player> whitePlayer, weak_ptr<Player> blackPlay
             obs->setSubject(chessState, obs);
         }
     }
-    while (true){
-        for (size_t i=0; i < players.size(); i++){
-            if(auto lockedPlayer = players[i].lock()){
-                while(true){
-                    try{
+    while (true)
+    {
+        for (size_t i = 0; i < players.size(); i++)
+        {
+            if (auto lockedPlayer = players[i].lock())
+            {
+                while (true)
+                {
+                    try
+                    {
                         InputMove currentMove = lockedPlayer->getMove();
                         currentMove.pieceColor = static_cast<Color>(i);
-                        if(currentMove.isResign){
-                            int winner = (i+1)%2;
+                        if (currentMove.isResign)
+                        {
+                            int winner = (i + 1) % 2;
                             Color winnerColor = static_cast<Color>(winner);
                             chessState->setResign(true);
                             chessState->setWinner(winnerColor);
                             return;
                         }
-                        else{
+                        else
+                        {
                             chessState->playMove(currentMove);
-                            if(chessState->isCheckmate()){
+                            if (chessState->isCheckmate())
+                            {
+                                std::cout << "isCheckmate" << std::endl;
                                 Color winnerColor = static_cast<Color>(i);
                                 chessState->setCheckmate(true);
                                 chessState->setWinner(winnerColor);
                                 return;
                             }
-                            if(chessState->isDraw()){
+                            if (chessState->isDraw())
+                            {
+                                std::cout << "isDraw" << std::endl;
                                 chessState->setDraw(true);
                                 return;
                             }
                         }
                     }
-                    catch(std::runtime_error e){
+                    catch (std::runtime_error e)
+                    {
                         cout << e.what() << endl;
                     }
                 }
             }
-            else{
+            else
+            {
                 continue;
             }
         }
@@ -68,38 +82,47 @@ void ChessGame::setup(std::vector<std::shared_ptr<Observer>> observers)
 {
     int rows = 0;
     int cols = 0;
-    if (auto inputLocked = input.lock()) {
+    if (auto inputLocked = input.lock())
+    {
         pair<int, int> dimensions = inputLocked->getDimensions();
         rows = dimensions.first;
         cols = dimensions.second;
     }
     chessState = std::make_shared<ChessState>(players, rows, cols);
-    for(auto &obs: observers){
+    for (auto &obs : observers)
+    {
         obs->setSubject(chessState, obs);
     }
-    
-    while(true){
-        if (auto inputLocked = input.lock()){
+
+    while (true)
+    {
+        if (auto inputLocked = input.lock())
+        {
             SetupMove setupMove = inputLocked->getSetup();
 
-            if(setupMove.isRemove){
+            if (setupMove.isRemove)
+            {
                 chessState->removePiece(setupMove.file, setupMove.rank);
                 chessState->notifyObservers();
             }
-            else if(setupMove.isPlace){
+            else if (setupMove.isPlace)
+            {
                 PieceType type = setupMove.pieceType;
                 chessState->placePieceAtPosition(type, setupMove.file, setupMove.rank, setupMove.playerColor);
             }
-            else if(setupMove.isChangeTurn){
+            else if (setupMove.isChangeTurn)
+            {
                 chessState->setCurrentTurn(setupMove.playerColor);
             }
 
-            if (setupMove.isDone){
+            if (setupMove.isDone)
+            {
                 break;
             }
         }
-        else{
-            throw std::runtime_error("input source no longer exists"); 
+        else
+        {
+            throw std::runtime_error("input source no longer exists");
         }
     }
 }

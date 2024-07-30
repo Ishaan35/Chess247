@@ -33,7 +33,7 @@ vector<PossibleMove> &SingleSquareMovement::getPossibleMoves(const vector<vector
 	////checking if we are getting position for king, and it has not moved (castling)
 	if (board[position.first][position.second]->getType() == PieceType::King && !board[position.first][position.second]->hasMoved())
 	{
-		// kingside castle check
+		// queenside castle check
 		if (0 <= position.second - 2)
 		{
 
@@ -56,7 +56,7 @@ vector<PossibleMove> &SingleSquareMovement::getPossibleMoves(const vector<vector
 		}
 		if (position.second + 2 < cols)
 		{
-			// queenside castle check
+			// kingside castle check
 			//  check if rook is present on the same rank, on the right corner of the board, and and has not moved
 
 			if (board[position.first][cols - 1] && board[position.first][cols - 1]->getType() == PieceType::Rook && !board[position.first][cols - 1]->hasMoved())
@@ -72,7 +72,7 @@ vector<PossibleMove> &SingleSquareMovement::getPossibleMoves(const vector<vector
 					}
 				}
 				if (isWayClear)
-					res.push_back(PossibleMove{position, make_pair(position.first, position.second - 2), true});
+					res.push_back(PossibleMove{position, make_pair(position.first, position.second + 2), true});
 			}
 		}
 	}

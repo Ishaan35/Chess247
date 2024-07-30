@@ -3,7 +3,8 @@
 
 using namespace std;
 
-bool ChessState::removePiece(char file, char rank){
+bool ChessState::removePiece(char file, char rank)
+{
     std::pair<int, int> coords = rankFileToCoordinates(file, rank);
     if (!isCoordinateInBounds(coords))
     {
@@ -15,13 +16,15 @@ bool ChessState::removePiece(char file, char rank){
     return true;
 }
 
-void ChessState::setCurrentTurn(Color turn){
+void ChessState::setCurrentTurn(Color turn)
+{
     currentTurn = turn;
 }
 
-void ChessState::setIsDefaultSetup(bool val){
+void ChessState::setIsDefaultSetup(bool val)
+{
     isDefaultSetup = val;
-}  
+}
 
 void ChessState::setWinner(Color winnerColor)
 {
@@ -75,18 +78,25 @@ bool ChessState::isCoordinateInBounds(std::pair<int, int> &coords)
     return true;
 }
 
-bool ChessState::isTargeted(Color color, pair<int, int> position){
+bool ChessState::isTargeted(Color color, pair<int, int> position)
+{
     Color oppositeColor = (color == Color::BLACK) ? Color::WHITE : Color::BLACK;
     int row = position.first;
     int col = position.second;
-    for (int i=0; i<board.size(); i++){
-        for (int j=0; j<board[i].size(); j++){
-            if (board[i][j] && board[i][j]->getColor() == oppositeColor){
-                if(i == row && j == col) return true; // opponent's piece is right on top of the given position, our convention is that it's targetted
-                pair<int, int> opponent{i,j};
+    for (int i = 0; i < board.size(); i++)
+    {
+        for (int j = 0; j < board[i].size(); j++)
+        {
+            if (board[i][j] && board[i][j]->getColor() == oppositeColor)
+            {
+                if (i == row && j == col)
+                    return true; // opponent's piece is right on top of the given position, our convention is that it's targetted
+                pair<int, int> opponent{i, j};
                 vector<PossibleMove> possibleMoves = board[i][j]->getPossibleMoves(opponent, board);
-                for (size_t k=0; k < possibleMoves.size(); k++){
-                    if(possibleMoves[k].to.first == row && possibleMoves[k].to.second == col){ // the opponent's piece can reach the given target
+                for (size_t k = 0; k < possibleMoves.size(); k++)
+                {
+                    if (possibleMoves[k].to.first == row && possibleMoves[k].to.second == col)
+                    { // the opponent's piece can reach the given target
                         return true;
                     }
                 }
@@ -96,24 +106,32 @@ bool ChessState::isTargeted(Color color, pair<int, int> position){
     return false;
 }
 
-bool ChessState::isDraw() {
+bool ChessState::isDraw()
+{
     int rows = board.size();
     int cols = board[0].size();
-    for (size_t i=0; i < board.size(); i++){
-        for (size_t j=0; j < board[i].size(); j++){
-            if (board[i][j] && currentTurn == board[i][j]->getColor()){
-                pair<int, int> position{i,j};
-                if(board[i][j]->getType() == PieceType::King && isTargeted(currentTurn, position)){
+    for (size_t i = 0; i < board.size(); i++)
+    {
+        for (size_t j = 0; j < board[i].size(); j++)
+        {
+            if (board[i][j] && currentTurn == board[i][j]->getColor())
+            {
+                pair<int, int> position{i, j};
+                if (board[i][j]->getType() == PieceType::King && isTargeted(currentTurn, position))
+                {
                     return false;
                 }
-                if(board[3][0]){
+                if (board[3][0])
+                {
                     int i;
                 }
                 cout << "not king" << endl;
                 vector<PossibleMove> possibleMoves = board[i][j]->getPossibleMoves(position, board);
                 cout << "poss moves gotten" << endl;
-                for (size_t k=0; k < possibleMoves.size(); k++){
-                    if (isValidMove(possibleMoves[k])){
+                for (size_t k = 0; k < possibleMoves.size(); k++)
+                {
+                    if (isValidMove(possibleMoves[k]))
+                    {
                         return false;
                     }
                 }
@@ -123,54 +141,66 @@ bool ChessState::isDraw() {
     return true;
 }
 
-bool ChessState::isCheckmate() {
-    for(size_t i=0; i<board.size(); i++){
-        for (size_t j=0; j<board[i].size(); j++){
-            if (board[i][j] && board[i][j]->getType() == PieceType::King && board[i][j]->getColor() == currentTurn){
-                pair<int, int> kingPos{i,j};
-                if (!isTargeted(currentTurn, kingPos)) return false; // not checkmate if not in check
+bool ChessState::isCheckmate()
+{
+    for (size_t i = 0; i < board.size(); i++)
+    {
+        for (size_t j = 0; j < board[i].size(); j++)
+        {
+            if (board[i][j] && board[i][j]->getType() == PieceType::King && board[i][j]->getColor() == currentTurn)
+            {
+                pair<int, int> kingPos{i, j};
+                if (!isTargeted(currentTurn, kingPos))
+                    return false; // not checkmate if not in check
                 vector<PossibleMove> allMoves;
                 cout << "King pos found" << endl;
-                for(int i = 0; i < board.size(); i++) {
-                    for(int j = 0; j < board[0].size(); j++) {
-                        if(board[i][j] && board[i][j]->getColor() == currentTurn) {
+                for (int i = 0; i < board.size(); i++)
+                {
+                    for (int j = 0; j < board[0].size(); j++)
+                    {
+                        if (board[i][j] && board[i][j]->getColor() == currentTurn)
+                        {
                             vector<PossibleMove> currMoves = board[i][j]->getPossibleMoves(make_pair(i, j), board);
                             allMoves.insert(allMoves.end(), currMoves.begin(), currMoves.end());
                         }
                     }
                 }
                 cout << "all possible moves for the black pieces accumulated" << endl;
-                for(int k=0; k < allMoves.size(); k++){
-                    cout << k << endl;
-                    if(allMoves[k].isCastling) continue;
+                for (int k = 0; k < allMoves.size(); k++)
+                {
+                    cout << k;
+                    if (allMoves[k].isCastling)
+                        continue;
                     cout << "1";
                     unique_ptr<Piece> toPiece = board[allMoves[k].to.first][allMoves[k].to.second] ? board[allMoves[k].to.first][allMoves[k].to.second]->clone() : nullptr;
                     cout << "2";
 
                     unique_ptr<Piece> fromPiece = board[allMoves[k].from.first][allMoves[k].from.second]->clone();
-                                        cout << "3";
+                    cout << "3";
 
                     board[allMoves[k].to.first][allMoves[k].to.second] = fromPiece->clone();
-                                        cout << "4";
+                    cout << "4";
 
                     board[allMoves[k].from.first][allMoves[k].from.second] = nullptr;
-                                        cout << "5";
+                    cout << "5";
 
                     // check if king is still in check
                     bool result = true;
-                    if(isTargeted(currentTurn, make_pair(i,j))) {
+                    if (isTargeted(currentTurn, make_pair(i, j)))
+                    {
                         result = false;
                     }
                     cout << "6";
 
                     // revert changes and return result
                     board[allMoves[k].from.first][allMoves[k].from.second] = fromPiece->clone();
-                                        cout << "7";
+                    cout << "7";
 
                     board[allMoves[k].to.first][allMoves[k].to.second] = toPiece ? toPiece->clone() : nullptr;
-                                        cout << "8";
+                    cout << "8" << endl;
 
-                    if(result) return false;
+                    if (result)
+                        return false;
                 }
                 cout << "checkmate function no error" << endl;
                 // vector<PossibleMove> possibleMoves = board[i][j]->getPossibleMoves(kingPos, board);
@@ -178,7 +208,7 @@ bool ChessState::isCheckmate() {
                 //     if(isValidMove(possibleMoves[k])){
                 //         return false;
                 //     }
-                // } 
+                // }
                 return true;
             }
         }
@@ -190,28 +220,35 @@ bool ChessState::isValidMove(PossibleMove move, char promotion)
     // coordinates in bound
     pair<int, int> from = move.from;
     pair<int, int> to = move.to;
-    if (!isCoordinateInBounds(move.from) || !isCoordinateInBounds(move.to)){
+    if (!isCoordinateInBounds(move.from) || !isCoordinateInBounds(move.to))
+    {
         return false;
     }
 
-    if(!board[move.from.first][move.from.second]) return false;
+    if (!board[move.from.first][move.from.second])
+        return false;
 
-    unique_ptr<Piece>& fromPiece = board[from.first][from.second];
-    unique_ptr<Piece>& toPiece = board[to.first][to.second];
+    unique_ptr<Piece> &fromPiece = board[from.first][from.second];
+    unique_ptr<Piece> &toPiece = board[to.first][to.second];
 
     // make sure correct color moved:
-    if(currentTurn != fromPiece->getColor()) {
+    if (currentTurn != fromPiece->getColor())
+    {
         return false;
     }
 
-    if(fromPiece->getType() == PieceType::Pawn && (move.to.first == 0 || move.to.first == board.size()-1) && promotion == ' '){
+    if (fromPiece->getType() == PieceType::Pawn && (move.to.first == 0 || move.to.first == board.size() - 1) && promotion == ' ')
+    {
         return false;
     }
 
     // check if the current colors king is in check
-    for(int i = 0;i < board.size(); i++) {
-        for(int j = 0;j < board[0].size(); j++) {
-            if(board[i][j] && board[i][j]->getColor() == currentTurn && board[i][j]->getType() == PieceType::King && isTargeted(currentTurn, make_pair(i, j))) {
+    for (int i = 0; i < board.size(); i++)
+    {
+        for (int j = 0; j < board[0].size(); j++)
+        {
+            if (board[i][j] && board[i][j]->getColor() == currentTurn && board[i][j]->getType() == PieceType::King && isTargeted(currentTurn, make_pair(i, j)))
+            {
                 // if king is in check, check if the move get's it out of check
                 // first perform the move
                 unique_ptr<Piece> oldToPiece = toPiece ? toPiece->clone() : nullptr;
@@ -221,7 +258,8 @@ bool ChessState::isValidMove(PossibleMove move, char promotion)
 
                 // check if king is still in check
                 bool result = true;
-                if(isTargeted(currentTurn, make_pair(i, j))) {
+                if (isTargeted(currentTurn, make_pair(i, j)))
+                {
                     result = false;
                 }
 
@@ -234,36 +272,44 @@ bool ChessState::isValidMove(PossibleMove move, char promotion)
     }
 
     vector<PossibleMove> allMoves = fromPiece->getPossibleMoves(from, board);
-    
+
     // check if one of the from pieces possible moves - if not, return false
     bool isPossibleMove = false;
-    for(int i = 0; i < allMoves.size(); i++) {
-        if(allMoves[i] == move) {
+    for (int i = 0; i < allMoves.size(); i++)
+    {
+        if (allMoves[i] == move)
+        {
             isPossibleMove = true;
             break;
         }
     }
-    if(!isPossibleMove) return false;
+    if (!isPossibleMove)
+        return false;
 
     // categorize as capture, move, or castle
     // if normal move (no capture) - could still be en passant
-    if(!toPiece) {
+    if (!toPiece)
+    {
         // if King is being moved, make sure not moving into check
-        if(fromPiece->getType() == PieceType::King && isTargeted(fromPiece->getColor(), to)) {
+        if (fromPiece->getType() == PieceType::King && isTargeted(fromPiece->getColor(), to))
+        {
             return false;
         }
         return true;
     }
-    else if(toPiece->getColor() != fromPiece->getColor()) { // if capture (both pieces are of different colors)
-        if(toPiece->getType() == PieceType::King) {
+    else if (toPiece->getColor() != fromPiece->getColor())
+    { // if capture (both pieces are of different colors)
+        if (toPiece->getType() == PieceType::King)
+        {
             return false;
         }
         return true;
     }
-    else if(move.isCastling) {
+    else if (move.isCastling)
+    {
         Color c = fromPiece->getColor();
         // check if there king should not be in check during castle, rook can be targeted, both cannot be targeted after
-        return !isTargeted(c, from) && !isTargeted(c, to) && !isTargeted(c, make_pair(from.first, (from.second + to.second)/2));
+        return !isTargeted(c, from) && !isTargeted(c, to) && !isTargeted(c, make_pair(from.first, (from.second + to.second) / 2));
     }
 
     return false;
@@ -278,13 +324,15 @@ void ChessState::playMove(InputMove &inputMove)
     {
         throw std::runtime_error("provided coordinates are not in bounds");
     }
-    
+
     PossibleMove possibleMove{fromCoords, toCoords};
-    if (!isValidMove(possibleMove, inputMove.promotion)){
+    if (!isValidMove(possibleMove, inputMove.promotion))
+    {
         throw std::runtime_error("invalid move!!");
     }
 
-    if(!board[fromCoords.first][fromCoords.second]->hasMoved()){
+    if (!board[fromCoords.first][fromCoords.second]->hasMoved())
+    {
         board[fromCoords.first][fromCoords.second]->setHasMoved(true);
     }
 
@@ -292,14 +340,17 @@ void ChessState::playMove(InputMove &inputMove)
 
     board[toCoords.first][toCoords.second].reset();
 
-    if(inputMove.promotion != ' '){
+    if (inputMove.promotion != ' ')
+    {
         PieceType type = PieceTypeConverter::charToPieceType(inputMove.promotion);
-        if (type != PieceType::King && type != PieceType::Pawn){
+        if (type != PieceType::King && type != PieceType::Pawn)
+        {
             std::unique_ptr<Piece> newPiece = createPiece(type, inputMove.pieceColor);
             board[toCoords.first][toCoords.second] = std::move(newPiece);
         }
     }
-    else{
+    else
+    {
         board[toCoords.first][toCoords.second] = std::move(fromPiece);
     }
     board[fromCoords.first][fromCoords.second].reset();
@@ -326,7 +377,7 @@ std::pair<int, int> ChessState::rankFileToCoordinates(char file, char rank)
 
 bool ChessState::placePieceAtPosition(PieceType t, char file, char rank, Color color)
 {
-    
+
     std::pair<int, int> coords = rankFileToCoordinates(file, rank);
     if (!isCoordinateInBounds(coords))
     {
