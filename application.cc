@@ -30,7 +30,6 @@ void Application::run()
 	{
 		if (command == "setup")
 		{
-			cout << "Enter in number of players" << endl;
 			game.setup(observers);
 		}
 		else if (command == "game")

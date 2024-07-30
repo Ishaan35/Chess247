@@ -24,5 +24,6 @@ public:
     PieceType getType();
     Color getColor();
     bool hasMoved() const;
+    void setHasMoved(bool val);
 };
 #endif

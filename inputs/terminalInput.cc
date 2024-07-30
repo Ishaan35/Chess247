@@ -120,6 +120,16 @@ InputMove TerminalInput::getInput()
         throw std::runtime_error("incorrect to location format");
     }
 
+    cin >> token;
+    if (token.length() == 1 && PieceTypeConverter::isValidChar(token[0])){
+        move.promotion = token[0];
+    }
+    else{
+        for (size_t i=token.length()-1; i>=0; i--){
+            cin.putback(token[i]);
+        }
+    }
+
     return move;
 }
 

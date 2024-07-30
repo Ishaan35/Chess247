@@ -16,7 +16,7 @@ void ChessGame::runGame(weak_ptr<Player> whitePlayer, weak_ptr<Player> blackPlay
     numActive = players.size();
     //if we did not initialize the chess state in setup, do it here
     if(!chessState){
-        chessState = std::make_shared<ChessState>(players, input,8, 8);
+        chessState = std::make_shared<ChessState>(players,8, 8);
         chessState->setGameRunning(true);
         chessState->defaultSetup();
         for (auto &obs : observers)
@@ -66,7 +66,7 @@ void ChessGame::setup(std::vector<std::shared_ptr<Observer>> observers)
         rows = dimensions.first;
         cols = dimensions.second;
     }
-    chessState = std::make_shared<ChessState>(players, input, rows, cols);
+    chessState = std::make_shared<ChessState>(players, rows, cols);
     for(auto &obs: observers){
         obs->setSubject(chessState, obs);
     }

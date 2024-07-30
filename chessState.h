@@ -6,7 +6,7 @@
 #include <memory>
 #include "subject.h"
 #include "colorEnum.h"
-#include "inputs/inputSource.h"
+#include "./pieces/pieceType.h"
 
 class ChessState : public Subject
 {
@@ -19,11 +19,10 @@ class ChessState : public Subject
     bool checkmate;
     Color winner;
     Color currentTurn;
-    weak_ptr<InputSource> inputSource;
     std::pair<int, int> rankFileToCoordinates(char file, char rank);
 
 public:
-    ChessState(const std::vector<std::weak_ptr<Player>> &players, weak_ptr<InputSource> input, int rows, int columns);
+    ChessState(const std::vector<std::weak_ptr<Player>> &players, int rows, int columns);
     ChessState(const ChessState &other);
     const std::vector<std::vector<std::unique_ptr<Piece>>> &getBoard();
     void defaultSetup();

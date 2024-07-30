@@ -9,7 +9,7 @@ struct InputMove
     pair<char, char> from;
     pair<char, char> to;
     bool isResign;
-    bool isPromotion;
+    char promotion = ' ';
     Color pieceColor;
 };
 

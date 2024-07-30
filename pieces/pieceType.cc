@@ -43,3 +43,12 @@ bool PieceTypeConverter::isValidPiece(PieceType p)
 {
     return playerPieceMappings[0].count(p) > 0;
 }
+
+bool PieceTypeConverter::isValidChar(char piece){
+    if(characterPieceMappings.count(piece) > 0){
+        return true;
+    }
+    else{
+        return false;
+    }
+}

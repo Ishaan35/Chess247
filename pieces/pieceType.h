@@ -29,6 +29,7 @@ public:
     static const PieceEnumAttributes &getPieceAttributes(Color color, PieceType pieceType);
     static const PieceType charToPieceType(char piece);
     static bool isValidPiece(PieceType p);
+    static bool isValidChar(char piece);
 
 private:
     static const std::unordered_map<PieceType, PieceEnumAttributes> playerPieceMappings[2];
