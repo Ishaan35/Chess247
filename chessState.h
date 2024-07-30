@@ -28,7 +28,7 @@ public:
     void defaultSetup();
     bool removePiece(char file, char rank);
     bool placePieceAtPosition(PieceType t, char file, char rank, Color color);
-    bool isValidMove(PossibleMove possibleMove);
+    bool isValidMove(PossibleMove possibleMove, char promotion = ' ');
     void playMove(InputMove &inputMove);
     bool isDraw();
     bool isCheck();

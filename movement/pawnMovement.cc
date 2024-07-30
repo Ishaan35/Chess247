@@ -9,7 +9,7 @@ vector<PossibleMove> &PawnMovement::getPossibleMoves(const vector<vector<unique_
 
 	vector<PossibleMove> &res = next->getPossibleMoves(board, allMoves, position);
 
-	int direction = color == WHITE ? 1 : -1;
+	int direction = color == WHITE ? -1 : 1;
 	int y = position.second;
 	int x = position.first;
 	int newX1 = x + direction;

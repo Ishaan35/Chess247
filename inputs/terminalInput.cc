@@ -16,17 +16,6 @@ string TerminalInput::trim(const string& str) {
     return str.substr(first, last - first + 1);
 }
 
-PieceType TerminalInput::getPromotion(){
-    cout << "Enter character representing the piece you want to promote to!";
-    char piece;
-    cin >> piece;
-    PieceType type = PieceTypeConverter::charToPieceType(piece);
-    if (!PieceTypeConverter::isValidPiece(type) || type != PieceType::Pawn || type != PieceType::Queen){
-        throw std::runtime_error("invalid piece attempted for promotion");
-    }
-    return type;
-}
-
 bool TerminalInput::processPosition(string token, char &file, char &rank)
 {
     if (token.length() != 2 || !islower(token[0]) || !isdigit(token[1]))
