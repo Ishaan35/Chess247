@@ -79,6 +79,9 @@ void ChessState::setIsDefaultSetup(bool val)
 void ChessState::setWinner(Color winnerColor)
 {
     winner = winnerColor;
+    if(auto lockedPlayer = players[winnerColor].lock()) {
+        lockedPlayer->incrementWon(false);
+    }
 }
 
 void ChessState::setGameRunning(bool val)
@@ -95,6 +98,12 @@ void ChessState::setResign(bool target)
 void ChessState::setDraw(bool target)
 {
     draw = target;
+    if(auto lockedWhite = players[0].lock()) {
+        lockedWhite->incrementWon(true);
+    }
+    if(auto lockedBlack = players[1].lock()) {
+        lockedBlack->incrementWon(true);
+    }
     notifyObservers();
 }
 
@@ -381,6 +390,10 @@ void ChessState::safelyMove(unique_ptr<Piece> &fromPiece, pair<int, int> fromCoo
         board[toCoords.first][toCoords.second] = fromPiece->clone();
     }
     board[fromCoords.first][fromCoords.second].reset();
+}
+
+Color ChessState::getPlayerTurn() {
+    return currentTurn;
 }
 
 void ChessState::playMove(InputMove &inputMove)

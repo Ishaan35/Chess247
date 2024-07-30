@@ -70,7 +70,7 @@ void Application::run()
 				cin >> level;
 				players[name] = make_shared<ComputerPlayer>(level, name, chessEngine);
 			}
-			cout << "Added player " << type << " " << name << endl;
+			cout << "Added player " << type << " " << players[name]->getName() << endl;
 		}
 		else if (command == "removep")
 		{
