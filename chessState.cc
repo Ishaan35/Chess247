@@ -375,7 +375,7 @@ std::pair<int, int> ChessState::rankFileToCoordinates(char file, char rank)
     return std::pair<int, int>{i, j};
 }
 
-bool ChessState::placePieceAtPosition(PieceType t, char file, char rank, Color color)
+bool ChessState::placePieceAtPosition(PieceType t, char file, char rank, Color color, bool isSetup)
 {
 
     std::pair<int, int> coords = rankFileToCoordinates(file, rank);
@@ -385,6 +385,33 @@ bool ChessState::placePieceAtPosition(PieceType t, char file, char rank, Color c
     }
     // add piece to state here
     board[coords.first][coords.second] = createPiece(t, color);
+
+    if (isSetup)
+    {
+        int rows = board.size();
+        if (t == PieceType::Pawn)
+        {
+            if (color == Color::WHITE)
+            {
+                if (coords.first == rows - 2)
+                    board[coords.first][coords.second]->setHasMoved(false);
+                else
+                    board[coords.first][coords.second]->setHasMoved(true);
+            }
+            if (color == Color::BLACK)
+            {
+                if (coords.first == 1)
+                    board[coords.first][coords.second]->setHasMoved(false);
+                else
+                    board[coords.first][coords.second]->setHasMoved(true);
+            }
+        }
+        else
+        {
+            board[coords.first][coords.second]->setHasMoved(true);
+        }
+    }
+
     notifyObservers();
     return true;
 }

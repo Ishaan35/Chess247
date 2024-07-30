@@ -108,7 +108,7 @@ void ChessGame::setup(std::vector<std::shared_ptr<Observer>> observers)
             else if (setupMove.isPlace)
             {
                 PieceType type = setupMove.pieceType;
-                chessState->placePieceAtPosition(type, setupMove.file, setupMove.rank, setupMove.playerColor);
+                chessState->placePieceAtPosition(type, setupMove.file, setupMove.rank, setupMove.playerColor, true);
             }
             else if (setupMove.isChangeTurn)
             {
@@ -117,6 +117,7 @@ void ChessGame::setup(std::vector<std::shared_ptr<Observer>> observers)
 
             if (setupMove.isDone)
             {
+                // add verificiation here
                 break;
             }
         }
