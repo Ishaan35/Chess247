@@ -30,8 +30,7 @@ vector<PossibleMove> &PawnMovement::getPossibleMoves(const vector<vector<unique_
 		{
 			res.push_back(PossibleMove{position, make_pair(newX1, y + 1)});
 		}
-		if (0 <= newX2 && static_cast<size_t>(newX2) < board.size() && !board[x][y]->hasMoved())
-		{
+		if(0 <= newX2 && static_cast<size_t>(newX2) < board.size() && !board[newX2][y] && !board[x][y]->hasMoved()) {
 			res.push_back(PossibleMove{position, make_pair(newX2, y)});
 		}
 	}

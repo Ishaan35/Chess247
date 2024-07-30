@@ -5,6 +5,17 @@
 
 using namespace std;
 
+PieceType TerminalInput::getPromotion(){
+    cout << "Enter character representing the piece you want to promote to!";
+    char piece;
+    cin >> piece;
+    PieceType type = PieceTypeConverter::charToPieceType(piece);
+    if (!PieceTypeConverter::isValidPiece(type) || type != PieceType::Pawn || type != PieceType::Queen){
+        throw std::runtime_error("invalid piece attempted for promotion");
+    }
+    return type;
+}
+
 bool TerminalInput::processPosition(string token, char &file, char &rank)
 {
     if (token.length() != 2 || !islower(token[0]) || !isdigit(token[1]))
@@ -114,6 +125,7 @@ InputMove TerminalInput::getInput()
 
 pair<int, int> TerminalInput::getDimensions()
 {
+    cout << "Enter board dimensions" << endl; // use the observer pattern
     int rows, cols;
     pair<int, int> dims{};
     if (cin >> rows)

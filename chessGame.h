@@ -5,6 +5,7 @@
 #include "inputs/inputSource.h"
 #include "chessState.h"
 #include "./colorEnum.h"
+#include "./pieces/pieceFactory.h"
 
 using namespace std;
 
