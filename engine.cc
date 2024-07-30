@@ -22,7 +22,7 @@ pair<char, char> Engine::convertToChars(pair<int, int> position)
     // convert to a-h (cols), 8-1 (rows)
     if (auto lockedState = chessState.lock())
     {
-        return make_pair((char)(position.second + 'a'), (char)(lockedState->getBoard().size() - position.first));
+        return make_pair((char)(position.second + 'a'), (char)(lockedState->getBoard().size() - position.first + '0'));
     }
     else
     {
@@ -30,26 +30,21 @@ pair<char, char> Engine::convertToChars(pair<int, int> position)
     }
 }
 
-InputMove Engine::getLevel1Move(Color playerColor)
+InputMove Engine::convertPossibleMoveToInputMove(PossibleMove pm, Color c)
 {
 
+    return InputMove{convertToChars(pm.from), convertToChars(pm.to), false, pm.promotion, c};
+}
+
+InputMove Engine::getLevel1Move(Color playerColor)
+{
     // get all possible moves for this player color
     vector<PossibleMove> allMoves;
 
     if (auto lockedPtr = chessState.lock())
-    {
-        const vector<vector<unique_ptr<Piece>>> &board = lockedPtr->getBoard();
-        for (int i = 0; i < board.size(); i++)
-        {
-            for (int j = 0; j < board[0].size(); j++)
-            {
-                if (board[i][j] && board[i][j]->getColor() == playerColor)
-                {
-                    vector<PossibleMove> currMoves = board[i][j]->getPossibleMoves(make_pair(i, j), board);
-                    allMoves.insert(allMoves.end(), currMoves.begin(), currMoves.end());
-                }
-            }
-        }
+    {   
+        ChessState tempState = *lockedPtr;
+        allMoves = tempState.getAllPossibleMoves(playerColor);
 
         // choose a random move from this until find one that is completely legal
         // get a random number from hardware, seed the generator, and define the range
@@ -57,31 +52,72 @@ InputMove Engine::getLevel1Move(Color playerColor)
         mt19937 gen(rd());
         uniform_int_distribution<> distr(0, allMoves.size() - 1);
         int randIndex = distr(gen);
-
-        // figure out if the move is a promotion and select random between "Q", "R", "K", "B";
-        const unique_ptr<Piece> &fromPiece = board[allMoves[randIndex].from.first][allMoves[randIndex].from.second];
-        int nextRow = allMoves[randIndex].to.first;
-        char randPromo = ' ';
-        if (fromPiece->getType() == PieceType::Pawn && nextRow == 0 || nextRow == board.size() - 1)
-        {
-            int randPromoInd = distr(gen) % 4;
-            vector<char> promos = {'Q', 'R', 'N', 'R'};
-            randPromo = promos[randPromoInd];
-        }
-
-        return InputMove{convertToChars(allMoves[randIndex].from), convertToChars(allMoves[randIndex].to), false, randPromo, fromPiece->getColor()};
+        return convertPossibleMoveToInputMove(allMoves[randIndex], playerColor);
+    }
+    else {
+        throw std::runtime_error("no state exists");
     }
 }
 
-InputMove Engine::getLevel2Move(Color playerColor) {}
+InputMove Engine::getLevel2Move(Color playerColor) {
+    // get all possible moves for this player color
+    vector<PossibleMove> capturingCheckMoves;
+
+    if(auto lockedPtr = chessState.lock()) {    
+        pair<int, int> otherKingPos;
+        Color opposite = (playerColor == Color::WHITE) ? Color::BLACK : Color::WHITE;
+        ChessState copiedState = *lockedPtr;
+        // unique_ptr<ChessState> copiedState = make_unique<ChessState>(ChessState{*lockedPtr});
+
+        for(int i = 0; i < copiedState.getBoard().size(); i++) {
+            for(int j = 0; j < copiedState.getBoard()[0].size(); j++) {
+                if(copiedState.getBoard()[i][j] && copiedState.getBoard()[i][j]->getColor() == opposite && copiedState.getBoard()[i][j]->getType() == PieceType::King){
+                    otherKingPos = {i,j};
+                    break;
+                }
+            }
+        }
+
+        vector<PossibleMove> allMoves = copiedState.getAllPossibleMoves(playerColor);
+        for (int k=0; k < allMoves.size(); k++){
+            int fromRow = allMoves[k].from.first;
+            int fromCol = allMoves[k].from.second;
+            int toRow = allMoves[k].to.first;
+            int toCol = allMoves[k].to.second;
+
+            if(copiedState.getBoard()[toRow][toCol] && copiedState.getBoard()[toRow][toCol]->getColor() == opposite){
+                capturingCheckMoves.push_back(allMoves[k]);
+                continue;
+            }
+
+            InputMove inputMove = convertPossibleMoveToInputMove(allMoves[k], playerColor);
+
+            ChessState temp = copiedState;
+            temp.playMove(inputMove);
+            if(temp.isTargeted(opposite, otherKingPos)){
+                capturingCheckMoves.push_back(allMoves[k]);
+            }
+        }
+
+        random_device rd;
+        mt19937 gen(rd()); 
+        if(capturingCheckMoves.size() > 0){
+            uniform_int_distribution<> distr(0, capturingCheckMoves.size()-1);
+            int randIndex = distr(gen);
+
+            return convertPossibleMoveToInputMove(capturingCheckMoves[randIndex], playerColor);
+        }
+        else{
+            uniform_int_distribution<> distr(0, allMoves.size()-1);
+            int randIndex = distr(gen);
+
+            return convertPossibleMoveToInputMove(allMoves[randIndex], playerColor);
+        }
+    }
+}
+
 InputMove Engine::getLevel3Move(Color playerColor) {}
 InputMove Engine::getLevel4Move(Color playerColor) {}
-
-InputMove Engine::convertPossibleMoveToInputMove(PossibleMove pm, Color c)
-{
-
-    return InputMove{convertToChars(pm.from), convertToChars(pm.to), false, pm.promotion, c};
-}
 
 int Engine::minimax(ChessState state, int depth, Color player)
 {
