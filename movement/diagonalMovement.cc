@@ -1,6 +1,8 @@
 #include "diagonalMovement.h"
 #include <algorithm>
 
+#include "../pieces/piece.h"
+
 DiagonalMovement::DiagonalMovement(Movement *next, Color color) : MovementDecorator{next, color} {}
 vector<PossibleMove> &DiagonalMovement::getPossibleMoves(const vector<vector<unique_ptr<Piece>>> &board, vector<PossibleMove> &allMoves, pair<int, int> position)
 {
@@ -14,27 +16,64 @@ vector<PossibleMove> &DiagonalMovement::getPossibleMoves(const vector<vector<uni
 	// keep going along one of the four diagonals until you reach a piece
 	for (int i = 1; y + i < board[0].size() && x + i < board.size(); i++)
 	{
-		res.push_back(PossibleMove{position, make_pair(x + i, y + i)});
 		if (board[x + i][y + i])
+		{
+			if (board[x + i][y + i]->getColor() != color)
+			{
+				res.push_back(PossibleMove{position, make_pair(x + i, y + i)});
+			}
 			break;
+		}
+		else
+		{
+			res.push_back(PossibleMove{position, make_pair(x + i, y + i)});
+		}
 	}
 	for (int i = 1; 0 <= y - i && x + i < board.size(); i++)
 	{
-		res.push_back(PossibleMove{position, make_pair(x + i, y - i)});
 		if (board[x + i][y - i])
+		{
+			if (board[x + i][y - i]->getColor() != color)
+			{
+				res.push_back(PossibleMove{position, make_pair(x + i, y - i)});
+			}
 			break;
+		}
+		else
+		{
+			res.push_back(PossibleMove{position, make_pair(x + i, y - i)});
+		}
 	}
 	for (int i = 1; y + i < board[0].size() && 0 <= x - i; i++)
 	{
-		res.push_back(PossibleMove{position, make_pair(x - i, y + i)});
 		if (board[x - i][y + i])
+		{
+			if (board[x - i][y + i]->getColor() != color)
+			{
+				res.push_back(PossibleMove{position, make_pair(x - i, y + i)});
+			}
 			break;
+		}
+		else
+		{
+			res.push_back(PossibleMove{position, make_pair(x - i, y + i)});
+		}
 	}
 	for (int i = 1; 0 <= y - i && 0 <= x - i; i++)
 	{
-		res.push_back(PossibleMove{position, make_pair(x - i, y - i)});
+
 		if (board[x - i][y - i])
+		{
+			if (board[x - i][y - i]->getColor() != color)
+			{
+				res.push_back(PossibleMove{position, make_pair(x - i, y - i)});
+			}
 			break;
+		}
+		else
+		{
+			res.push_back(PossibleMove{position, make_pair(x - i, y - i)});
+		}
 	}
 
 	return res;

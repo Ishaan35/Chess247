@@ -25,7 +25,8 @@ vector<PossibleMove> &SingleSquareMovement::getPossibleMoves(const vector<vector
 
 			if (0 <= newX && newX < rows && 0 <= newY && newY < cols)
 			{
-				res.push_back(PossibleMove{position, make_pair(newX, newY)});
+				if (!(board[newX][newY] && board[newX][newY]->getColor() == color))
+					res.push_back(PossibleMove{position, make_pair(newX, newY)});
 			}
 		}
 	}

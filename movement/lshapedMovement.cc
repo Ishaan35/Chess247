@@ -14,7 +14,8 @@ vector<PossibleMove> &LShapedMovement::getPossibleMoves(const vector<vector<uniq
 		int newY = position.second + v[1];
 		if (0 <= newX && static_cast<size_t>(newX) < board.size() && 0 <= newY && static_cast<size_t>(newY) < board[0].size())
 		{
-			res.push_back(PossibleMove{position, make_pair(newX, newY)});
+			if (!(board[newX][newY] && board[newX][newY]->getColor() == color))
+				res.push_back(PossibleMove{position, make_pair(newX, newY)});
 		}
 	}
 	return res;
