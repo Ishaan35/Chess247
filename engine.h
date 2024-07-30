@@ -15,6 +15,8 @@ class Engine
     InputMove getLevel2Move(Color playerColor);
     InputMove getLevel3Move(Color playerColor);
     InputMove getLevel4Move(Color playerColor);
+    InputMove maximize(ChessState chessStateCopy, int depth);
+    InputMove minimize(ChessState chessStateCopy, int depth);
 
 public:
     InputMove getBestMove(Color playerColor, int depth);

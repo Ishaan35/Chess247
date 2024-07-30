@@ -50,6 +50,7 @@ public:
     Color getWinner();
     bool isTargeted(Color color, pair<int, int> position);
     void verifySetup();
+    int getChessBoardEvaluation();
     ~ChessState();
 };
 

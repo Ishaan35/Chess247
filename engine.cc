@@ -67,6 +67,14 @@ InputMove Engine::getLevel2Move(Color playerColor) {}
 InputMove Engine::getLevel3Move(Color playerColor) {}
 InputMove Engine::getLevel4Move(Color playerColor) {}
 
+
+InputMove Engine::maximize(ChessState chessStateCopy, int depth){
+    
+}
+InputMove Engine::minimize(ChessState chessStateCopy, int depth){
+    
+}
+
 InputMove Engine::getBestMove(Color playerColor, int depth)
 {
     switch(depth) {

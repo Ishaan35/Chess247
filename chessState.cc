@@ -528,6 +528,26 @@ Color ChessState::getWinner()
     return winner;
 }
 
+int ChessState::getChessBoardEvaluation()
+{
+    int sum = 0;
+    for (int i = 0; i < board.size(); i++)
+    {
+        for (int j = 0; j < board[0].size(); j++)
+        {
+            if (board[i][j])
+            {
+                int value = PieceTypeConverter::getPieceAttributes(board[i][j]->getColor(), board[i][j]->getType()).value;
+                if (board[i][j]->getColor() == Color::BLACK)
+                    sum -= value;
+                else
+                    sum += value;
+            }
+        }
+    }
+    return sum;
+}
+
 void ChessState::defaultSetup()
 {
     for (size_t i = 0; i < board.size(); i++)
