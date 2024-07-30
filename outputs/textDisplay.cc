@@ -41,6 +41,7 @@ void TextDisplay::setSubject(std::shared_ptr<Subject> s, std::shared_ptr<Observe
         {
             subjectWkPtr->attach(o);
         }
+        notify();
     }
 }
 
