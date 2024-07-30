@@ -297,8 +297,10 @@ bool ChessState::isValidMove(PossibleMove move, char promotion)
         }
         return true;
     }
-    else if(toPiece && toPiece->getColor() != fromPiece->getColor()) { // if capture (both pieces are of different colors)
-        if(toPiece && toPiece->getType() == PieceType::King) {
+    else if (toPiece && toPiece->getColor() != fromPiece->getColor())
+    { // if capture (both pieces are of different colors)
+        if (toPiece && toPiece->getType() == PieceType::King)
+        {
             return false;
         }
         return true;
@@ -313,16 +315,20 @@ bool ChessState::isValidMove(PossibleMove move, char promotion)
     return false;
 };
 
-void ChessState::safelyMove(unique_ptr<Piece> &fromPiece, pair<int, int> fromCoords, pair<int, int> toCoords, Color pieceColor, char promotion){
+void ChessState::safelyMove(unique_ptr<Piece> &fromPiece, pair<int, int> fromCoords, pair<int, int> toCoords, Color pieceColor, char promotion)
+{
     fromPiece->setHasMoved(true);
     board[toCoords.first][toCoords.second].reset();
-    if(promotion != ' '){
+    if (promotion != ' ')
+    {
         PieceType type = PieceTypeConverter::charToPieceType(promotion);
-        if (type != PieceType::King && type != PieceType::Pawn){
+        if (type != PieceType::King && type != PieceType::Pawn)
+        {
             board[toCoords.first][toCoords.second] = createPiece(type, pieceColor);
         }
     }
-    else{
+    else
+    {
         board[toCoords.first][toCoords.second] = fromPiece->clone();
     }
     board[fromCoords.first][fromCoords.second].reset();
@@ -347,17 +353,20 @@ void ChessState::playMove(InputMove &inputMove)
     std::unique_ptr<Piece> fromPiece = std::move(board[fromCoords.first][fromCoords.second]);
     safelyMove(fromPiece, fromCoords, toCoords, currentTurn, inputMove.promotion);
 
-    if(fromPiece->getType() == PieceType::King && (fromCoords.first - toCoords.first == 0) && abs(fromCoords.second - toCoords.second) == 2){
-        if(fromCoords.second - toCoords.second == 2){
+    if (fromPiece->getType() == PieceType::King && (fromCoords.first - toCoords.first == 0) && abs(fromCoords.second - toCoords.second) == 2)
+    {
+        if (fromCoords.second - toCoords.second == 2)
+        {
             std::unique_ptr<Piece> rook = std::move(board[toCoords.first][0]);
             pair<int, int> rookFrom{toCoords.first, 0}; // move the rook at bottom left of board, toCoords is the destination of the king, which is also the back rank for white or black
-            pair<int, int> rookTo{toCoords.first, toCoords.second+1};
+            pair<int, int> rookTo{toCoords.first, toCoords.second + 1};
             safelyMove(rook, rookFrom, rookTo, currentTurn, ' ');
         }
-        else if(toCoords.second - fromCoords.second == 2){
-            std::unique_ptr<Piece> rook = std::move(board[toCoords.first][board.size()-1]);
-            pair<int, int> rookFrom{toCoords.first, board.size()-1};
-            pair<int, int> rookTo{toCoords.first, toCoords.second-1};
+        else if (toCoords.second - fromCoords.second == 2)
+        {
+            std::unique_ptr<Piece> rook = std::move(board[toCoords.first][board.size() - 1]);
+            pair<int, int> rookFrom{toCoords.first, board.size() - 1};
+            pair<int, int> rookTo{toCoords.first, toCoords.second - 1};
             safelyMove(rook, rookFrom, rookTo, currentTurn, ' ');
         }
     }
@@ -415,7 +424,7 @@ bool ChessState::placePieceAtPosition(PieceType t, char file, char rank, Color c
         }
         else
         {
-            board[coords.first][coords.second]->setHasMoved(true);
+            // board[coords.first][coords.second]->setHasMoved(true);
         }
     }
 
