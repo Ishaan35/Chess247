@@ -75,7 +75,52 @@ InputMove Engine::getLevel1Move(Color playerColor)
 
 InputMove Engine::getLevel2Move(Color playerColor) {}
 InputMove Engine::getLevel3Move(Color playerColor) {}
-InputMove Engine::getLevel4Move(Color playerColor) {}
+InputMove Engine::getLevel4Move(Color playerColor)
+{
+    // get all possible valid moves for current player
+    if (auto lockedstate = chessState.lock())
+    {
+        ChessState tempState = *lockedstate;
+        vector<PossibleMove> validMoves = tempState.getAllPossibleMoves(playerColor);
+
+        if (playerColor == Color::WHITE)
+        {
+            int maxMove = std::numeric_limits<int>::min();
+            InputMove bestMove;
+            for (PossibleMove pm : validMoves)
+            {
+                ChessState copy = tempState;
+                InputMove move = convertPossibleMoveToInputMove(pm, playerColor);
+                copy.playMove(move);
+                int bestEval = minimax(copy, 3, Color::BLACK);
+                if (bestEval > maxMove)
+                {
+                    maxMove = bestEval;
+                    bestMove = move;
+                }
+            }
+            return bestMove;
+        }
+        else
+        {
+            int minMove = std::numeric_limits<int>::max();
+            InputMove bestMove;
+            for (PossibleMove pm : validMoves)
+            {
+                ChessState copy = tempState;
+                InputMove move = convertPossibleMoveToInputMove(pm, playerColor);
+                copy.playMove(move);
+                int worstEval = minimax(copy, 3, Color::WHITE);
+                if (worstEval < minMove)
+                {
+                    minMove = worstEval;
+                    bestMove = move;
+                }
+            }
+            return bestMove;
+        }
+    }
+}
 
 InputMove Engine::convertPossibleMoveToInputMove(PossibleMove pm, Color c)
 {
@@ -83,7 +128,7 @@ InputMove Engine::convertPossibleMoveToInputMove(PossibleMove pm, Color c)
     return InputMove{convertToChars(pm.from), convertToChars(pm.to), false, pm.promotion, c};
 }
 
-int Engine::minimax(ChessState state, int depth, Color player)
+int Engine::minimax(ChessState &state, int depth, Color player)
 {
     if (depth == 0 || state.getCheckmate() || state.isDraw() || state.getResign())
     {
@@ -97,7 +142,7 @@ int Engine::minimax(ChessState state, int depth, Color player)
         std::vector<PossibleMove> possibleMoves = state.getAllPossibleMoves(player);
         for (PossibleMove move : possibleMoves)
         {
-            ChessState copyState = state;
+            ChessState copyState{state};
             InputMove convertedMove = convertPossibleMoveToInputMove(move, player);
             copyState.playMove(convertedMove);
             int eval = minimax(copyState, depth - 1, Color::BLACK);
@@ -111,7 +156,7 @@ int Engine::minimax(ChessState state, int depth, Color player)
         std::vector<PossibleMove> possibleMoves = state.getAllPossibleMoves(player);
         for (PossibleMove move : possibleMoves)
         {
-            ChessState copyState = state;
+            ChessState copyState{state};
             InputMove convertedMove = convertPossibleMoveToInputMove(move, player);
             copyState.playMove(convertedMove);
             int eval = minimax(copyState, depth - 1, Color::WHITE);

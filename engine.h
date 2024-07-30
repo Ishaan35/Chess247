@@ -17,7 +17,7 @@ class Engine
     InputMove getLevel4Move(Color playerColor);
     InputMove maximize(ChessState chessStateCopy, int depth);
     InputMove minimize(ChessState chessStateCopy, int depth);
-    int minimax(ChessState chessStateCopy, int depth, Color player);
+    int minimax(ChessState &chessStateCopy, int depth, Color player);
     InputMove convertPossibleMoveToInputMove(PossibleMove pm, Color c);
 
 public:

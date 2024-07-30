@@ -530,6 +530,17 @@ Color ChessState::getWinner()
 
 int ChessState::getChessBoardEvaluation()
 {
+    if (checkmate)
+    {
+        if (winner == Color::BLACK)
+        {
+            return -99999;
+        }
+        else
+        {
+            return 99999;
+        }
+    }
     int sum = 0;
     for (int i = 0; i < board.size(); i++)
     {
