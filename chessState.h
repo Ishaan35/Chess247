@@ -47,6 +47,7 @@ public:
     void setCurrentTurn(Color turn);
     Color getWinner();
     bool isTargeted(Color color, pair<int, int> position);
+    void verifySetup();
     ~ChessState();
 };
 

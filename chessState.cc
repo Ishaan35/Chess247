@@ -3,6 +3,45 @@
 
 using namespace std;
 
+void ChessState::verifySetup(){
+    int whiteKingCount = 0;
+    int blackKingCount = 0;
+    pair<int, int> whiteKingCoords{-1,-1};
+    pair<int, int> blackKingCoords{-1,-1};
+
+    for (int i=0; i<board.size(); i++){
+        for (int j=0; j<board[i].size(); j++){
+            if (board[i][j]){
+                if(board[i][j]->getColor() == Color::WHITE && board[i][j]->getType() == PieceType::King){
+                    whiteKingCount++;
+                    whiteKingCoords = {i,j};
+                }
+                else if(board[i][j]->getColor() == Color::BLACK && board[i][j]->getType() == PieceType::King){
+                    blackKingCount++;
+                    blackKingCoords = {i,j};
+                }
+                else if(board[i][j]->getType() == PieceType::Pawn && (i==0 || i==board.size()-1)){
+                    throw std::runtime_error("pawn is on the back rank");
+                }
+            }
+        }
+    }
+    if(whiteKingCount != 1){
+        throw std::runtime_error("White must have exactly one king");
+    }
+    if(blackKingCount != 1){
+        throw std::runtime_error("Black must have exactly one king");
+    }
+
+    if(isTargeted(Color::WHITE, whiteKingCoords)){
+        throw std::runtime_error("White king is in check in setup, invalid");
+    }
+    else if(isTargeted(Color::BLACK, blackKingCoords)){
+        throw std::runtime_error("Black king is in check in setup, invalid");
+    }
+    return;
+}
+
 bool ChessState::removePiece(char file, char rank)
 {
     std::pair<int, int> coords = rankFileToCoordinates(file, rank);
@@ -186,7 +225,7 @@ bool ChessState::isCheckmate()
 
                     // check if king is still in check
                     bool result = true;
-                    if (isTargeted(currentTurn, make_pair(i, j)))
+                    if (isTargeted(currentTurn, make_pair(allMoves[k].to.first, allMoves[k].to.second)))
                     {
                         result = false;
                     }
@@ -258,7 +297,7 @@ bool ChessState::isValidMove(PossibleMove move, char promotion)
 
                 // check if king is still in check
                 bool result = true;
-                if (isTargeted(currentTurn, make_pair(i, j)))
+                if (isTargeted(currentTurn, make_pair(to.first, to.second)))
                 {
                     result = false;
                 }
@@ -393,7 +432,6 @@ std::pair<int, int> ChessState::rankFileToCoordinates(char file, char rank)
 
 bool ChessState::placePieceAtPosition(PieceType t, char file, char rank, Color color, bool isSetup)
 {
-
     std::pair<int, int> coords = rankFileToCoordinates(file, rank);
     if (!isCoordinateInBounds(coords))
     {

@@ -50,16 +50,16 @@ void ChessGame::runGame(weak_ptr<Player> whitePlayer, weak_ptr<Player> blackPlay
                             chessState->playMove(currentMove);
                             if (chessState->isCheckmate())
                             {
-                                std::cout << "isCheckmate" << std::endl;
                                 Color winnerColor = static_cast<Color>(i);
                                 chessState->setCheckmate(true);
                                 chessState->setWinner(winnerColor);
+                                std::cout << "you checkmated them W " << std::endl;
                                 return;
                             }
                             if (chessState->isDraw())
                             {
-                                std::cout << "isDraw" << std::endl;
                                 chessState->setDraw(true);
+                                std::cout << "it's a stalemate lol" << std::endl;
                                 return;
                             }
                         }
@@ -114,11 +114,16 @@ void ChessGame::setup(std::vector<std::shared_ptr<Observer>> observers)
             {
                 chessState->setCurrentTurn(setupMove.playerColor);
             }
-
             if (setupMove.isDone)
             {
-                // add verificiation here
-                break;
+                try{
+                    chessState->verifySetup(); // verify chess board setup
+                    cout << "setup is valid!";
+                    break;
+                }
+                catch(std::runtime_error(e)){
+                    cout << e.what() << endl;
+                }
             }
         }
         else
