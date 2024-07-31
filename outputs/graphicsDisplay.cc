@@ -15,7 +15,6 @@ void GraphicsDisplay::setSubject(std::shared_ptr<Subject> s, std::shared_ptr<Obs
         subject = std::dynamic_pointer_cast<ChessState>(s);
         if (auto subjectWkPtr = subject.lock())
         {
-            std::cout << "attaching observer" << std::endl;
             subjectWkPtr->attach(o);
         }
         window = std::make_unique<GraphicsWindow>(width, height);

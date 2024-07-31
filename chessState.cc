@@ -266,7 +266,6 @@ bool ChessState::calculateCheckmate()
                     if (result)
                         return false;
                 }
-                cout << "checkmate function no error" << endl;
                 // vector<PossibleMove> possibleMoves = board[i][j]->getPossibleMoves(kingPos, board);
                 // for (size_t k=0; k<possibleMoves.size(); k++){
                 //     if(isValidMove(possibleMoves[k])){
