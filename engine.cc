@@ -2,6 +2,8 @@
 #include <stdexcept>
 #include <random>
 #include <limits>
+#include <iostream>
+#include <random>
 
 ChessState Engine::createChessStateCopy()
 {
@@ -127,58 +129,77 @@ InputMove Engine::getLevel2Move(Color playerColor)
     }
 }
 
-InputMove Engine::getLevel3Move(Color playerColor) {}
+InputMove Engine::getLevel3Move(Color playerColor)
+{
+    return minimaxDriver(playerColor, 1);
+}
 InputMove Engine::getLevel4Move(Color playerColor)
 {
-    // get all possible valid moves for current player
-    if (auto lockedstate = chessState.lock())
+    return minimaxDriver(playerColor, 2);
+}
+
+InputMove Engine::minimaxDriver(Color playerColor, int depth)
+{
+    vector<PossibleMove> allMoves;
+    if (auto lockedptr = chessState.lock())
     {
-        ChessState tempState = *lockedstate;
-        vector<PossibleMove> validMoves = tempState.getAllPossibleMoves(playerColor);
+        ChessState tempState = *lockedptr;
+        allMoves = tempState.getAllPossibleMoves(playerColor);
 
         if (playerColor == Color::WHITE)
         {
-            int maxMove = std::numeric_limits<int>::min();
-            InputMove bestMove;
-            for (PossibleMove pm : validMoves)
+            int maxMove = -1000000000;
+            std::vector<InputMove> bestMoves;
+            for (PossibleMove pm : allMoves)
             {
                 ChessState copy = tempState;
                 InputMove move = convertPossibleMoveToInputMove(pm, playerColor);
                 copy.playMove(move);
-                int bestEval = minimax(copy, 3, Color::BLACK);
+                int bestEval = minimax(copy, depth, Color::BLACK);
                 if (bestEval > maxMove)
                 {
+                    bestMoves.clear();
                     maxMove = bestEval;
-                    bestMove = move;
+                    bestMoves.push_back(move); // new set of better moves with 'maxMove' reward
+                }
+                else if (bestEval == maxMove)
+                {
+                    bestMoves.push_back(move);
                 }
             }
-            return bestMove;
+            std::random_device rd;
+            std::mt19937 gen(rd());
+            std::uniform_int_distribution<> distr(0, bestMoves.size() - 1);
+            return bestMoves[distr(gen)];
         }
         else
         {
-            int minMove = std::numeric_limits<int>::max();
-            InputMove bestMove;
-            for (PossibleMove pm : validMoves)
+            int minMove = 1000000000;
+            std::vector<InputMove> bestMoves;
+            for (PossibleMove pm : allMoves)
             {
                 ChessState copy = tempState;
                 InputMove move = convertPossibleMoveToInputMove(pm, playerColor);
                 copy.playMove(move);
-                int worstEval = minimax(copy, 3, Color::WHITE);
+                int worstEval = minimax(copy, depth, Color::WHITE);
+
                 if (worstEval < minMove)
                 {
+                    bestMoves.clear();
                     minMove = worstEval;
-                    bestMove = move;
+                    bestMoves.push_back(move); // new set of better moves with 'maxMove' reward
+                }
+                else if (worstEval == minMove)
+                {
+                    bestMoves.push_back(move);
                 }
             }
-            return bestMove;
+            std::random_device rd;
+            std::mt19937 gen(rd());
+            std::uniform_int_distribution<> distr(0, bestMoves.size() - 1);
+            return bestMoves[distr(gen)];
         }
     }
-}
-
-InputMove Engine::convertPossibleMoveToInputMove(PossibleMove pm, Color c)
-{
-
-    return InputMove{convertToChars(pm.from), convertToChars(pm.to), false, pm.promotion, c};
 }
 
 int Engine::minimax(ChessState &state, int depth, Color player)

@@ -191,9 +191,7 @@ bool ChessState::isDraw()
                 {
                     int i;
                 }
-                cout << "not king" << endl;
                 vector<PossibleMove> possibleMoves = board[i][j]->getPossibleMoves(position, board);
-                cout << "poss moves gotten" << endl;
                 for (size_t k = 0; k < possibleMoves.size(); k++)
                 {
                     if (isValidMove(possibleMoves[k]))
@@ -314,7 +312,7 @@ bool ChessState::isValidMove(PossibleMove move, char promotion)
         for (int j = 0; j < board[0].size(); j++)
         {
             if (board[i][j] && board[i][j]->getColor() == currentTurn && board[i][j]->getType() == PieceType::King && isTargeted(currentTurn, make_pair(i, j)))
-            {   
+            {
 
                 // if king is in check, check if the move get's it out of check
                 // first perform the move
@@ -328,19 +326,20 @@ bool ChessState::isValidMove(PossibleMove move, char promotion)
 
                 // if the piece that moved was a king, check to position
                 // if the piece that moved wasn't a king, check i,j
-                if(board[to.first][to.second]->getType() == PieceType::King) {
+                if (board[to.first][to.second]->getType() == PieceType::King)
+                {
                     if (isTargeted(currentTurn, make_pair(to.first, to.second)))
                     {
                         result = false;
                     }
                 }
-                else {
+                else
+                {
                     if (isTargeted(currentTurn, make_pair(i, j)))
                     {
                         result = false;
                     }
                 }
-                
 
                 // revert changes and return result
                 board[from.first][from.second] = board[to.first][to.second]->clone();
@@ -517,14 +516,14 @@ bool ChessState::placePieceAtPosition(PieceType t, char file, char rank, Color c
 }
 
 ChessState::ChessState(const ChessState &other)
-    : players{other.players}, gameRunning{other.gameRunning}, resign{other.resign}, 
-      draw{other.draw}, checkmate{other.checkmate}, winner{other.winner}, currentTurn{currentTurn}
+    : players{other.players}, gameRunning{other.gameRunning}, resign{other.resign},
+      draw{other.draw}, checkmate{other.checkmate}, winner{other.winner}, currentTurn{other.currentTurn}
 {
     board.resize(other.board.size());
 
     for (size_t i = 0; i < other.board.size(); i++)
     {
-        board[i].resize(other.board[i].size());  // Using resize instead of reserve
+        board[i].resize(other.board[i].size()); // Using resize instead of reserve
         for (size_t j = 0; j < other.board[i].size(); j++)
         {
             board[i][j] = other.board[i][j] ? other.board[i][j]->clone() : nullptr;
@@ -590,7 +589,7 @@ std::vector<PossibleMove> ChessState::getAllPossibleMoves(Color player)
                 vector<PossibleMove> validMoves;
                 for (PossibleMove p : currMoves)
                 {
-                    if (isValidMove(p))
+                    if (isValidMove(p, p.promotion))
                     {
                         validMoves.push_back(p);
                     }
@@ -604,6 +603,7 @@ std::vector<PossibleMove> ChessState::getAllPossibleMoves(Color player)
 
 void ChessState::defaultSetup()
 {
+    currentTurn = Color::WHITE;
     for (size_t i = 0; i < board.size(); i++)
     {
         for (size_t j = 0; j < board[0].size(); j++)

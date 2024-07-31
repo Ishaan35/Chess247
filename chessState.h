@@ -18,7 +18,7 @@ class ChessState : public Subject
     bool draw = false;
     bool checkmate = false;
     Color winner;
-    Color currentTurn;
+    Color currentTurn = Color::WHITE;
     std::pair<int, int> rankFileToCoordinates(char file, char rank);
     void safelyMove(unique_ptr<Piece> &fromPiece, pair<int, int> fromCoords, pair<int, int> toCoords, Color pieceColor, char promotion = ' ');
 
